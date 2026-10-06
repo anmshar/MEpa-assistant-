@@ -1,0 +1,1187 @@
+<title>Mepa AI Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: creator workspace — brand bar, six-step tab rail (look back → plan → create → learn → ask), one working surface below. */
+:root {
+  --bg: #fbf8f1;
+  --surface: #fffdf8;
+  --surface-2: #f3eee3;
+  --line: #e7e0d2;
+  --ink: #1b2422;
+  --ink-2: #4b5450;
+  --ink-3: #7a827e;
+  --brand: #1f8f7a;
+  --tab: #f1ece1;
+  --tab-active: #1f3b37;
+  --tab-active-ink: #f6f1e5;
+  --t1: #1f3b37; --t1-ink: #f6f1e5;
+  --t2: #f6dcc0; --t2-ink: #3b2a1c;
+  --t3: #f2ede1; --t3-ink: #1b2422;
+  --t4: #d7eadf; --t4-ink: #1b2422;
+  --side: #cfe4d8;
+  --cta: #c2412a; --cta-ink: #ffffff;
+  --chip: #ffffff;
+  --good: #1d7a4a; --good-bg: #d8efe0;
+  --bad: #b8372b; --bad-bg: #f8dcd6;
+  --grid: #ece6da;
+  --s-ig: #eb6834; --s-tt: #1baf7a; --s-yt: #2a78d6;
+  --font: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --r: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b2726; --surface: #213130; --surface-2: #273a38; --line: #33473f;
+    --ink: #eef1ea; --ink-2: #b9c3be; --ink-3: #8b9792; --brand: #3cc2a6;
+    --tab: #26363a; --tab-active: #f1ebdc; --tab-active-ink: #1b2726;
+    --t1: #d6e6c3; --t1-ink: #1b2726; --t2: #4a392b; --t2-ink: #f5e5d2; --t3: #26332f; --t3-ink: #eef1ea; --t4: #2c4a3f; --t4-ink: #eef1ea;
+    --side: #2e4a3f; --cta: #ef8a66; --cta-ink: #1b2726; --chip: #2a3b39;
+    --good: #6fd39c; --good-bg: #24473a; --bad: #f08c80; --bad-bg: #4d2c28; --grid: #2d3e3b;
+    --s-ig: #d95926; --s-tt: #199e70; --s-yt: #3987e5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b2726; --surface: #213130; --surface-2: #273a38; --line: #33473f;
+  --ink: #eef1ea; --ink-2: #b9c3be; --ink-3: #8b9792; --brand: #3cc2a6;
+  --tab: #26363a; --tab-active: #f1ebdc; --tab-active-ink: #1b2726;
+  --t1: #d6e6c3; --t1-ink: #1b2726; --t2: #4a392b; --t2-ink: #f5e5d2; --t3: #26332f; --t3-ink: #eef1ea; --t4: #2c4a3f; --t4-ink: #eef1ea;
+  --side: #2e4a3f; --cta: #ef8a66; --cta-ink: #1b2726; --chip: #2a3b39;
+  --good: #6fd39c; --good-bg: #24473a; --bad: #f08c80; --bad-bg: #4d2c28; --grid: #2d3e3b;
+  --s-ig: #d95926; --s-tt: #199e70; --s-yt: #3987e5;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font: inherit; color: inherit; }
+h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
+h1 { font-size: 2rem; font-weight: 800; }
+h2 { font-size: 1.1rem; font-weight: 800; }
+h3 { font-size: 0.98rem; font-weight: 700; }
+p { margin: 0; }
+svg { flex-shrink: 0; }
+.num { font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-3); }
+.small { font-size: 0.82rem; }
+.eyebrow { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+.wrap { max-width: 1240px; margin-inline: auto; padding-inline: clamp(16px, 3vw, 32px); }
+.topbar { padding-block: 18px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.5rem; letter-spacing: -0.03em; text-decoration: none; color: var(--ink); }
+.logo sup { font-size: 0.6rem; font-weight: 700; margin-left: 1px; }
+.top-r { display: flex; align-items: center; gap: 10px; position: relative; }
+.ws { font-size: 0.85rem; color: var(--ink-2); font-weight: 500; }
+.iconbtn { position: relative; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; cursor: pointer; }
+.iconbtn:hover { background: var(--surface-2); }
+.dotcount { position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; border-radius: 9px; background: var(--cta); color: var(--cta-ink); font-size: 0.68rem; font-weight: 800; display: grid; place-items: center; padding-inline: 4px; border: 2px solid var(--bg); }
+.me { width: 38px; height: 38px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line); font-weight: 800; font-size: 0.78rem; cursor: pointer; }
+
+.tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; padding-bottom: 6px; }
+.tab { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--tab); color: var(--ink); text-decoration: none; min-width: 0; }
+.tab:hover { filter: brightness(0.98); }
+.tab[aria-current="page"] { background: var(--tab-active); color: var(--tab-active-ink); }
+.tab .tt { font-weight: 700; font-size: 0.86rem; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tab .ts { font-size: 0.72rem; opacity: 0.7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tab > span { min-width: 0; display: grid; }
+
+main { padding-block: 22px 56px; }
+.crumb { font-size: 0.78rem; color: var(--ink-3); display: flex; gap: 6px; }
+.pagehead { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.pagehead p { color: var(--ink-2); margin-top: 4px; }
+.period { background: var(--surface-2); border-radius: 10px; padding: 6px 12px; font-size: 0.8rem; font-weight: 700; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; min-width: 0; }
+.cols { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.stack { display: grid; gap: 18px; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.between { justify-content: space-between; }
+.card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; padding: 9px 15px; font-weight: 700; font-size: 0.86rem; border: 1px solid transparent; cursor: pointer; background: none; white-space: nowrap; text-decoration: none; color: inherit; }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn-cta { background: var(--cta); color: var(--cta-ink); }
+.btn-dark { background: var(--tab-active); color: var(--tab-active-ink); }
+.btn-ghost { border-color: var(--line); background: var(--chip); }
+.btn-ghost:hover:not(:disabled) { background: var(--surface-2); }
+.btn-sm { padding: 6px 11px; font-size: 0.78rem; border-radius: 9px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--chip); border-radius: 999px; padding: 5px 11px; font-size: 0.78rem; font-weight: 600; cursor: pointer; color: var(--ink); text-decoration: none; }
+.chip:hover { background: var(--surface-2); }
+.chip[aria-pressed="true"] { background: var(--tab-active); color: var(--tab-active-ink); border-color: var(--tab-active); }
+.tag { display: inline-flex; align-items: center; gap: 5px; border-radius: 8px; padding: 3px 9px; font-size: 0.75rem; font-weight: 700; background: var(--surface-2); color: var(--ink-2); white-space: nowrap; }
+.tag.good { background: var(--good-bg); color: var(--good); }
+.tag.bad { background: var(--bad-bg); color: var(--bad); }
+.tag.warn { background: var(--t2); color: var(--t2-ink); }
+.sw { width: 9px; height: 9px; display: inline-block; flex-shrink: 0; }
+.sw.instagram { background: var(--s-ig); border-radius: 50%; }
+.sw.tiktok { background: var(--s-tt); border-radius: 2px; }
+.sw.youtube { background: var(--s-yt); transform: rotate(45deg); border-radius: 1px; width: 8px; height: 8px; }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr); gap: 18px; }
+.idrow { display: flex; gap: 14px; align-items: flex-start; }
+.av { width: 52px; height: 52px; border-radius: 50%; background: var(--tab-active); color: var(--tab-active-ink); display: grid; place-items: center; font-weight: 800; flex-shrink: 0; }
+.handle { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+.plats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.plat { display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; padding: 4px 9px; font-size: 0.76rem; font-weight: 600; background: var(--surface-2); }
+.plat b { font-weight: 800; }
+.illu { position: relative; border-radius: 14px; overflow: hidden; background: #f6efe0; border: 1px solid var(--line); min-height: 170px; }
+.illu svg { width: 100%; height: 100%; display: block; }
+.illu .cap { position: absolute; left: 10px; bottom: 8px; font-size: 0.68rem; font-weight: 700; color: #4b5450; }
+.viewas { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; font-size: 0.8rem; color: var(--ink-3); }
+.viewas select { border: 1px solid var(--line); background: var(--chip); border-radius: 8px; padding: 4px 8px; font-size: 0.8rem; }
+
+.side { background: var(--side); border: 0; display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 8px; position: relative; }
+.side h2 { font-size: 1.7rem; margin-top: 6px; }
+.side p { color: var(--ink-2); margin-top: 6px; font-size: 0.9rem; }
+.mascot { position: relative; width: 150px; height: 150px; cursor: pointer; border: 0; background: none; padding: 0; }
+.mascot svg { width: 100%; height: 100%; }
+.mascot .pill { position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 3px 10px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; border: 1px solid var(--line); }
+.mascot:hover svg { transform: rotate(-3deg) scale(1.03); }
+.mascot svg { transition: transform 0.2s; }
+.grounded { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--ink-2); border-top: 1px solid color-mix(in oklab, var(--ink) 12%, transparent); padding-top: 10px; margin-top: 6px; }
+
+/* KPI tiles */
+.kpi { border-radius: var(--r); padding: 14px 16px; display: grid; gap: 2px; text-decoration: none; position: relative; min-width: 0; }
+.kpi .l { font-size: 0.78rem; font-weight: 600; opacity: 0.85; }
+.kpi .v { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-top: 4px; }
+.kpi .go { position: absolute; top: 12px; right: 12px; opacity: 0.7; }
+.kpi .d { margin-top: 6px; justify-self: start; display: inline-flex; gap: 4px; align-items: center; font-size: 0.72rem; font-weight: 700; border-radius: 6px; padding: 2px 7px; }
+.k1 { background: var(--t1); color: var(--t1-ink); } .k2 { background: var(--t2); color: var(--t2-ink); } .k3 { background: var(--t3); color: var(--t3-ink); border: 1px solid var(--line); } .k4 { background: var(--t4); color: var(--t4-ink); }
+.d.up { background: color-mix(in oklab, var(--good) 22%, transparent); }
+.d.down { background: color-mix(in oklab, var(--bad) 20%, transparent); }
+.d.flat { background: color-mix(in oklab, currentColor 12%, transparent); }
+
+.moves-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; margin: 4px 0 10px; }
+.move { border-radius: var(--r); padding: 16px; display: grid; gap: 8px; align-content: start; text-decoration: none; color: inherit; min-height: 210px; grid-template-rows: auto auto 1fr auto; }
+.move h3 { font-size: 1.12rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; }
+.move p { font-size: 0.84rem; opacity: 0.85; }
+.move .foot { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; }
+.m1 { background: var(--t4); color: var(--t4-ink); } .m2 { background: var(--t2); color: var(--t2-ink); } .m3 { background: var(--t3); color: var(--t3-ink); border: 1px solid var(--line); }
+.move:hover { filter: brightness(0.98); }
+
+/* Donut */
+.donut-wrap { display: grid; justify-items: center; gap: 4px; margin-block: 8px 14px; }
+.donut { width: 190px; height: 190px; }
+.donut path { cursor: pointer; transition: opacity 0.15s; }
+.legend-list { display: grid; gap: 8px; }
+.lrow { display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; background: var(--chip); cursor: pointer; font-size: 0.86rem; font-weight: 600; text-align: left; width: 100%; }
+.lrow[aria-pressed="true"] { border-color: var(--ink); }
+.lrow b { font-weight: 800; }
+
+/* Charts */
+.chart-wrap { position: relative; }
+.chart-wrap svg { width: 100%; height: auto; display: block; touch-action: none; }
+.tip { position: absolute; top: 0; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 0.78rem; box-shadow: 0 6px 18px rgb(0 0 0 / 0.1); white-space: nowrap; }
+.bars { display: grid; gap: 10px; }
+.bar-row { display: grid; gap: 4px; }
+.bar-top { display: flex; justify-content: space-between; font-size: 0.86rem; gap: 8px; }
+.bar-track { height: 10px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--brand); border-radius: 999px; transition: opacity 0.15s; }
+.bars:hover .bar-fill { opacity: 0.4; }
+.bars .bar-row:hover .bar-fill { opacity: 1; }
+.bar-detail { font-size: 0.75rem; color: var(--ink-3); height: 0; overflow: hidden; transition: height 0.15s; }
+.bar-row:hover .bar-detail, .bar-row:focus-within .bar-detail { height: 1.2em; }
+.heat-scroll { overflow-x: auto; }
+.heat { display: grid; grid-template-columns: 34px repeat(24, minmax(14px, 1fr)); gap: 2px; min-width: 460px; }
+.heat .hl { font-size: 0.66rem; color: var(--ink-3); text-align: center; }
+.heat .dl { font-size: 0.7rem; color: var(--ink-3); text-align: right; padding-right: 4px; line-height: 18px; }
+.heat .cell { height: 18px; border-radius: 3px; }
+.heat .cell.best { outline: 2px solid var(--ink); outline-offset: -2px; }
+.legend { display: flex; align-items: center; gap: 3px; font-size: 0.74rem; color: var(--ink-3); }
+.legend i { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+th { text-align: left; font-size: 0.73rem; color: var(--ink-3); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+td { padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.r, th.r { text-align: right; }
+.table-scroll { overflow-x: auto; }
+.cap1 { max-width: 360px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Chat */
+.chat { display: grid; grid-template-rows: minmax(0, 1fr) auto; height: calc(100vh - 260px); min-height: 460px; }
+.msgs { overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 4px 2px 16px; }
+.msg-user { align-self: flex-end; max-width: 78%; background: var(--tab-active); color: var(--tab-active-ink); padding: 10px 14px; border-radius: 16px 16px 4px 16px; white-space: pre-wrap; }
+.msg-ai { align-self: flex-start; max-width: 88%; display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 10px; }
+.msg-ai .bubble { background: var(--surface); border: 1px solid var(--line); padding: 12px 16px; border-radius: 16px 16px 16px 4px; min-width: 0; }
+.mini { width: 36px; height: 36px; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.md p { margin: 0.35em 0; }
+.md ul, .md ol { margin: 0.35em 0; padding-left: 1.25em; }
+.md li { margin: 0.15em 0; }
+.md h4 { margin: 0.6em 0 0.2em; font-size: 0.98rem; }
+.md code { font-size: 0.85em; background: var(--surface-2); padding: 0 4px; border-radius: 4px; }
+.composer { display: flex; gap: 8px; align-items: flex-end; padding-top: 10px; border-top: 1px solid var(--line); }
+.composer textarea { flex: 1; min-width: 0; resize: none; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 10px 12px; min-height: 46px; max-height: 160px; }
+.starters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 660px; }
+.starter { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 14px; cursor: pointer; color: var(--ink-2); font-size: 0.88rem; }
+.starter:hover { background: var(--surface-2); }
+.thinking { display: inline-flex; gap: 4px; align-items: center; color: var(--ink-3); font-size: 0.85rem; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brand); animation: pulse 1s infinite ease-in-out; }
+.dot:nth-child(2) { animation-delay: 0.15s; } .dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes pulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+
+/* Plan */
+.week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.day { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px; min-height: 150px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.day.today { border-color: var(--ink); }
+.day-h { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--ink-3); font-weight: 700; }
+.idea { border-radius: 10px; background: var(--surface-2); padding: 9px 10px; cursor: pointer; border: 1px solid transparent; text-align: left; display: grid; gap: 4px; width: 100%; }
+.idea:hover { border-color: var(--line); }
+.idea .t { font-weight: 700; font-size: 0.82rem; line-height: 1.3; }
+.idea .m { font-size: 0.7rem; color: var(--ink-3); display: flex; align-items: center; gap: 5px; }
+.idea.posted { opacity: 0.55; } .idea.posted .t { text-decoration: line-through; }
+
+/* Studio */
+.field { display: grid; gap: 5px; }
+.field label { font-size: 0.78rem; font-weight: 700; color: var(--ink-2); }
+.field input, .field textarea, .field select { border: 1px solid var(--line); background: var(--chip); border-radius: 10px; padding: 9px 11px; width: 100%; }
+.field textarea { min-height: 70px; resize: vertical; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.range { display: grid; gap: 6px; }
+.range-bar { position: relative; height: 14px; background: var(--surface-2); border-radius: 999px; }
+.range-bar i { position: absolute; top: 0; bottom: 0; background: var(--brand); border-radius: 999px; opacity: 0.85; }
+.range-bar b { position: absolute; top: -3px; bottom: -3px; width: 3px; background: var(--ink); border-radius: 2px; }
+.factor { display: flex; justify-content: space-between; font-size: 0.84rem; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.factor:last-child { border-bottom: 0; }
+
+/* Deals */
+.board { display: grid; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 4px; }
+.col { background: var(--surface-2); border-radius: var(--r); padding: 10px; display: flex; flex-direction: column; gap: 8px; min-height: 200px; }
+.col-h { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--ink-2); padding: 2px 4px; }
+.deal { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; cursor: pointer; text-align: left; display: grid; gap: 6px; width: 100%; }
+.deal:hover { border-color: var(--ink-3); }
+.deal .b { font-weight: 800; }
+
+/* Layers */
+.scrim { position: fixed; inset: 0; background: rgb(10 20 18 / 0.45); z-index: 40; display: grid; place-items: center; padding: 16px; }
+.modal { background: var(--surface); border-radius: 18px; width: min(540px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; padding: 22px; display: grid; gap: 14px; border: 1px solid var(--line); }
+.drawer-scrim { place-items: stretch end; padding: 0; }
+.drawer { background: var(--surface); width: min(520px, 100%); height: 100%; overflow-y: auto; padding: 22px; display: grid; gap: 14px; align-content: start; border-left: 1px solid var(--line); }
+.pop { position: absolute; top: 46px; right: 0; z-index: 30; width: min(380px, calc(100vw - 32px)); background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 16px 40px rgb(0 0 0 / 0.14); overflow: hidden; }
+.pop-h { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.pop-list { max-height: 420px; overflow-y: auto; }
+.notif { display: grid; grid-template-columns: 34px minmax(0, 1fr) 10px; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); cursor: pointer; text-align: left; background: none; border-left: 0; border-right: 0; border-top: 0; width: 100%; }
+.notif:hover { background: var(--surface-2); }
+.notif .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; }
+.notif .ttl { font-weight: 700; font-size: 0.86rem; line-height: 1.3; }
+.notif .bd { font-size: 0.8rem; color: var(--ink-2); margin-top: 2px; }
+.notif .tm { font-size: 0.72rem; color: var(--ink-3); margin-top: 4px; }
+.notif .ud { width: 8px; height: 8px; border-radius: 50%; background: var(--cta); margin-top: 6px; }
+.ic.perf { background: var(--t4); color: var(--t4-ink); } .ic.deal { background: var(--t2); color: var(--t2-ink); } .ic.remind { background: var(--t1); color: var(--t1-ink); } .ic.report { background: var(--surface-2); color: var(--ink); } .ic.account { background: var(--bad-bg); color: var(--bad); }
+.menu a, .menu button { display: flex; align-items: center; gap: 10px; padding: 10px 16px; text-decoration: none; color: var(--ink); font-size: 0.88rem; font-weight: 600; width: 100%; background: none; border: 0; cursor: pointer; text-align: left; }
+.menu a:hover, .menu button:hover { background: var(--surface-2); }
+.toast { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); right: 20px; background: var(--tab-active); color: var(--tab-active-ink); padding: 12px 14px; border-radius: 14px; font-size: 0.86rem; z-index: 60; max-width: min(380px, calc(100vw - 40px)); display: flex; gap: 12px; align-items: center; box-shadow: 0 12px 30px rgb(0 0 0 / 0.2); }
+.toast button { background: none; border: 1px solid currentColor; color: inherit; border-radius: 8px; padding: 4px 10px; font-weight: 700; cursor: pointer; font-size: 0.78rem; }
+.progress { height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+.progress i { display: block; height: 100%; width: 0; background: var(--brand); transition: width 0.25s; }
+.perm { display: grid; gap: 8px; font-size: 0.9rem; }
+.perm div { display: flex; gap: 8px; }
+.switch { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+.switch:last-child { border-bottom: 0; }
+.switch input { width: 40px; height: 22px; accent-color: var(--brand); }
+.note { font-size: 0.78rem; color: var(--ink-3); }
+.ai-off { font-size: 0.8rem; color: var(--bad); }
+ul.plain { margin: 0; padding-left: 1.15em; display: grid; gap: 4px; }
+.prio { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; }
+.prio .n { width: 28px; height: 28px; border-radius: 50%; background: var(--tab-active); color: var(--tab-active-ink); display: grid; place-items: center; font-weight: 800; font-size: 0.8rem; }
+.acct { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+.plogo { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; color: #fff; }
+.plogo.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b 55%, #8134af); } .plogo.youtube { background: #e62117; } .plogo.tiktok { background: #111; box-shadow: inset 0 0 0 2px #25f4ee; }
+
+@media (max-width: 1060px) {
+  .cols { grid-template-columns: minmax(0, 1fr); }
+  .tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .week { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .illu { min-height: 150px; }
+  .grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid3, .grid2 { grid-template-columns: minmax(0, 1fr); }
+  .tabs { gap: 6px; }
+  .tab { padding: 8px; gap: 5px; } .tab .ts { display: none; } .tab svg { width: 14px; height: 14px; }
+  .tab .tt { font-size: 0.72rem; white-space: normal; overflow: visible; letter-spacing: -0.01em; }
+  .ws { display: none; }
+  h1 { font-size: 1.6rem; }
+  .kpi .v { font-size: 1.6rem; }
+  .side { grid-template-columns: minmax(0, 1fr) 110px; } .mascot { width: 110px; height: 110px; }
+  .starters { grid-template-columns: minmax(0, 1fr); }
+  .week { grid-template-columns: minmax(0, 1fr); }
+  .chat { height: calc(100vh - 300px); }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<header class="wrap">
+  <div class="topbar">
+    <a class="logo" href="#overview" aria-label="Mepa AI home">
+      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 30 16 16 30 2 16z" fill="var(--brand)"/><path d="M16 9 23 16 16 23 9 16z" fill="var(--bg)"/><path d="M16 2 30 16h-7L16 9z" fill="color-mix(in oklab, var(--brand) 60%, var(--ink))"/></svg>
+      mepa<sup>AI</sup>
+    </a>
+    <div class="top-r">
+      <span class="ws">Creator workspace</span>
+      <button class="iconbtn" data-act="bell" aria-label="Notifications" id="bell"></button>
+      <button class="me" data-act="menu" aria-label="Workspace menu" id="meBtn">NR</button>
+      <div id="popover"></div>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="Main"></nav>
+</header>
+<main class="wrap"><div id="view"></div></main>
+<div id="layer"></div>
+<div id="toasts"></div>
+
+<script>
+"use strict";
+/* ============================================================== utils */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const DAY = 864e5, NOW = Date.now();
+const k = (n) => new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(n).toLowerCase();
+const pct = (x, d = 1) => (x == null || !isFinite(x) ? "–" : (x * 100).toFixed(d) + "%");
+const eur = (n) => "€" + Math.round(n).toLocaleString("en");
+const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const PL = { instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube" };
+const FMT = { reel: "Reel", image: "Photo", carousel: "Carousel", video: "Video", short: "Short" };
+const HOOK = { question: "Question", bold_claim: "Bold claim", tutorial: "Tutorial", story: "Story", list: "List" };
+const isoDay = (d) => { const x = new Date(d); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`; };
+const dl = (d, o = { weekday: "short", day: "numeric", month: "short" }) => new Date(d).toLocaleDateString("en-GB", o);
+const tl = (d) => new Date(d).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+const ago = (t) => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? "just now" : m < 60 ? m + " min ago" : m < 1440 ? Math.round(m / 60) + " h ago" : Math.round(m / 1440) + " d ago"; };
+const I = (name, s = 18) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+const ICONS = {
+  home: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  perf: '<path d="M4 20V11M10 20V5M16 20v-6M21 20H3"/>',
+  growth: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  studio: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/>',
+  results: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/>',
+  chat: '<path d="M4 5h16v11H9l-5 4z"/>',
+  bell: '<path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21a2 2 0 0 0 4 0"/>',
+  arrow: '<path d="M7 17 17 7M9 7h8v8"/>',
+  right: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  sync: '<path d="M20 11a8 8 0 0 0-14-5L4 8M4 13a8 8 0 0 0 14 5l2-2"/><path d="M4 4v4h4M20 20v-4h-4"/>',
+  look: '<path d="M4 19l5-6 4 3 7-9"/><path d="M4 5v14h16"/>',
+  plan: '<path d="M4 6h16M4 12h10M4 18h7"/><circle cx="18" cy="16" r="3"/>',
+  db: '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',
+  deal: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>',
+  kit: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.5"/><path d="M14 10h4M14 14h4M6 16c.8-1.5 1.9-2 3-2s2.2.5 3 2"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+  moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  fire: '<path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-3.5 2-5 1 1.5 2 2 3 2-1-2-1-4 0-7z"/>',
+  clock: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+  alert: '<path d="M12 4 2.5 20h19z"/><path d="M12 10v4M12 17h.01"/>',
+  doc: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/>',
+  reset: '<path d="M4 12a8 8 0 1 0 2.3-5.7L4 8.5"/><path d="M4 4v4.5h4.5"/>',
+};
+
+/* ===================================================== demo data engine */
+function rng(seed) { return () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const pick = (r, xs) => xs[Math.floor(r() * xs.length)];
+const TOPICS = ["studio sessions", "beat making", "gear", "songwriting", "day in the life"];
+const HOOKS = ["question", "bold_claim", "tutorial", "story", "list"];
+const CAPTIONS = {
+  "studio sessions": ["Making a full track from one voice memo", "Late-night session: building this chord progression", "Recording vocals in a closet (it works)"],
+  "beat making": ["How I make drums hit harder in 3 steps", "Flipping a 1970s sample into a lo-fi beat", "Can I make a beat in 10 minutes?"],
+  gear: ["My €300 home studio setup", "5 plugins I use on every track", "Is this €99 mic as good as the €1,000 one?"],
+  songwriting: ["Writing a chorus from a text my mum sent", "The 4-chord trick behind most pop songs", "Turning a bad day into a verse"],
+  "day in the life": ["A day in my life as a full-time musician in Munich", "What my studio mornings actually look like", "The week before a release: honest vlog"],
+};
+const HOOK_PREFIX = { question: "Ever wondered? ", bold_claim: "Hot take: ", tutorial: "Save this: ", story: "Story time: ", list: "3 things: " };
+const ACCOUNTS = {
+  instagram: { handle: "nova.rae", start: 171000, end: 184300, ppw: 4, base: 62000, seed: 42, formats: [["reel", 0.6], ["carousel", 0.25], ["image", 0.15]] },
+  tiktok: { handle: "nova.rae", start: 84500, end: 96800, ppw: 5, base: 88000, seed: 19, formats: [["short", 1]] },
+  youtube: { handle: "NovaRaeMusic", start: 38900, end: 41200, ppw: 2, base: 21000, seed: 7, formats: [["video", 0.4], ["short", 0.6]] },
+};
+const HISTORY = 120;
+function genPosts(platform) {
+  const a = ACCOUNTS[platform], r = rng(a.seed), out = [];
+  for (let d = HISTORY; d >= 1; d--) {
+    if (r() > a.ppw / 7) continue;
+    let x = r(), format = a.formats[0][0];
+    for (const [f, w] of a.formats) { if ((x -= w) <= 0) { format = f; break; } }
+    const topic = pick(r, TOPICS), hook = pick(r, HOOKS), hour = pick(r, [8, 9, 12, 13, 17, 18, 19, 20, 20, 21]);
+    const at = new Date(NOW - d * DAY); at.setHours(hour, Math.floor(r() * 60), 0, 0);
+    let m = 0.6 + r() * 0.8;
+    if (format === "reel" || format === "short") m *= 1.4;
+    if (format === "image") m *= 0.55;
+    if (hook === "tutorial") m *= 1.5; if (hook === "question") m *= 1.2; if (hook === "story") m *= 0.85;
+    if (topic === "beat making") m *= 1.35; if (topic === "studio sessions") m *= 1.2; if (topic === "day in the life") m *= 0.75;
+    if (hour >= 19 && hour <= 21) m *= 1.4; if (hour >= 12 && hour <= 13) m *= 0.8;
+    m *= 0.85 + 0.4 * (1 - d / HISTORY);
+    if (d < 29) m *= 1.06;
+    if (r() < 0.04) m *= 4;
+    const views = Math.round(a.base * m);
+    const reach = platform === "instagram" ? Math.round(views * (0.72 + r() * 0.1)) : 0;
+    const saveRate = platform === "instagram" ? (format === "carousel" ? 0.028 : 0.007) + (topic === "gear" ? 0.014 : 0) + (hook === "tutorial" ? 0.009 : 0) : 0;
+    const likeRate = (d < 29 ? 0.03 : 0.033) + r() * 0.025;
+    out.push({ id: `${platform}-${HISTORY - d}`, platform, format, topic, hook, at: at.getTime(), caption: HOOK_PREFIX[hook] + pick(r, CAPTIONS[topic]), views, reach,
+      likes: Math.round(views * likeRate), comments: Math.round(views * (0.002 + r() * 0.004) * (hook === "question" ? 2.2 : 1)),
+      shares: Math.round(views * (0.003 + r() * 0.006)), saves: Math.round((reach || views) * saveRate) });
+  }
+  return out;
+}
+function genSnaps(platform) {
+  const a = ACCOUNTS[platform], r = rng(99 + a.seed), out = [];
+  for (let d = HISTORY; d >= 0; d--) { const t = 1 - d / HISTORY, f = a.start + (a.end - a.start) * (0.6 * t + 0.4 * t * t); out.push({ day: isoDay(NOW - d * DAY), followers: Math.round(f + (d ? (r() - 0.5) * 120 : 0)) }); }
+  return out;
+}
+const ACTIVE = Array.from({ length: 7 }, (_, wd) => Array.from({ length: 24 }, (_, h) => { const we = wd === 0 || wd === 6; return Math.min(1, Math.exp(-((h - (we ? 11 : 8)) ** 2) / 4) * 0.5 + Math.exp(-((h - (we ? 19 : 20)) ** 2) / 5) + (h < 6 ? 0.03 : 0.1)); }));
+const AUDIENCE = { age: { "18-24": 0.38, "25-34": 0.36, "35-44": 0.12, "13-17": 0.09, "45+": 0.05 }, gender: { Women: 0.54, Men: 0.43, Other: 0.03 }, country: { Germany: 0.41, "United States": 0.14, Austria: 0.08, "United Kingdom": 0.07, Switzerland: 0.06 } };
+
+/* ========================================================== analytics */
+const inter = (p) => p.likes + p.comments + p.shares + p.saves;
+const er = (p) => { const b = p.reach || p.views; return b ? inter(p) / b : 0; };
+const mean = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
+const quant = (xs, q) => { if (!xs.length) return 0; const s = [...xs].sort((a, b) => a - b), i = (s.length - 1) * q, lo = Math.floor(i); return s[lo] + (s[Math.ceil(i)] - s[lo]) * (i - lo); };
+const within = (ps, days, offset = 0) => { const end = NOW - offset * DAY, start = end - days * DAY; return ps.filter((p) => p.at > start && p.at <= end); };
+function summarize(ps) { return { posts: ps.length, views: ps.reduce((a, p) => a + p.views, 0), reach: ps.reduce((a, p) => a + (p.reach || p.views), 0), avgViews: Math.round(mean(ps.map((p) => p.views))), avgEr: mean(ps.map(er)), saves: ps.reduce((a, p) => a + p.saves, 0) }; }
+function compare(ps, days) { const c = summarize(within(ps, days)), p = summarize(within(ps, days, days)); return { c, p, dReach: p.reach ? (c.reach - p.reach) / p.reach : null, dViews: p.avgViews ? (c.avgViews - p.avgViews) / p.avgViews : null, dEr: p.avgEr ? (c.avgEr - p.avgEr) / p.avgEr : null, dPosts: c.posts - p.posts }; }
+function breakdown(ps, key) {
+  const all = mean(ps.map((p) => p.views)) || 1, g = {};
+  for (const p of ps) { const kk = key === "weekday" ? WD[new Date(p.at).getDay()] : key === "hour" ? new Date(p.at).getHours() : p[key]; (g[kk] ??= []).push(p); }
+  return Object.entries(g).map(([kk, xs]) => ({ key: kk, posts: xs.length, avgViews: Math.round(mean(xs.map((p) => p.views))), avgEr: mean(xs.map(er)), lift: mean(xs.map((p) => p.views)) / all })).sort((a, b) => b.avgViews - a.avgViews);
+}
+function bestTimes(ps, active, n = 5) {
+  const grid = Array.from({ length: 7 }, (_, d) => Array.from({ length: 24 }, (_, h) => (active ? active[d][h] : 0)));
+  if (ps.length >= 10) { const byH = breakdown(ps, "hour"), mx = Math.max(...byH.map((r) => r.lift), 1); for (const r of byH) if (r.posts >= 2) for (let d = 0; d < 7; d++) grid[d][+r.key] += r.lift / mx; }
+  const slots = [];
+  for (let d = 0; d < 7; d++) { let b = 0; for (let h = 1; h < 24; h++) if (grid[d][h] > grid[d][b]) b = h; slots.push({ wd: d, h: b, score: grid[d][b], label: `${WD[d]} ${String(b).padStart(2, "0")}:00` }); }
+  return slots.sort((a, b) => b.score - a.score).slice(0, n);
+}
+const CPM = { instagram: [12, 25], youtube: [18, 40], tiktok: [6, 15] }, BER = { instagram: 0.04, youtube: 0.04, tiktok: 0.05 };
+function rate(platform, avgViews, avgEr) { const q = Math.min(1.5, Math.max(0.7, avgEr / BER[platform])), [lo, hi] = CPM[platform], rd = (n) => Math.max(100, Math.round(n / 50) * 50); return { platform, low: rd((avgViews / 1000) * lo * q), high: rd((avgViews / 1000) * hi * q) }; }
+
+/* =========================================================== app state */
+const DEFAULT_PROFILE = { name: "Nova Rae", handle: "nova.rae", niche: "Music & studio-life creator", city: "Munich", goals: "Grow TikTok to 150K by summer, launch a sample pack in spring, and land 3 paid partnerships a month", audience: "Bedroom producers and music fans aged 18-34", voice: "Warm, honest, a bit nerdy about gear", boundaries: "No gambling, alcohol, crypto or fast fashion", hours: 12 };
+const at0 = (d, h) => { const b = new Date(NOW); b.setHours(0, 0, 0, 0); return b.getTime() + d * DAY + h * 3600e3; };
+function defaultPlan() {
+  return [
+    { id: "p1", day: at0(0, 20), platform: "tiktok", format: "short", title: "Drums that hit harder in 3 steps", hook: "Your drums sound flat? Fix it in 30 seconds.", description: "Screen-record the DAW, 3 quick before/after A/Bs, end on the full loop.", caption: "Which step made the biggest difference?", hashtags: ["producer", "beatmaking", "mixingtips"], why: "Beat-making tutorials are your strongest combo: 1.5× views.", status: "scheduled", example: true },
+    { id: "p2", day: at0(2, 19), platform: "instagram", format: "carousel", title: "My €300 home studio, item by item", hook: "Everything I use, under €300", description: "One slide per item with price and why. Last slide: what to buy first.", caption: "Save this for when you start your setup.", hashtags: ["homestudio", "musicgear"], why: "Gear carousels get your highest save rate.", status: "scheduled", example: true },
+    { id: "p3", day: at0(4, 20), platform: "youtube", format: "video", title: "Making a full track from one voice memo", hook: "This voice memo became a finished song in 3 hours.", description: "Time-lapse session with 4 talking-head checkpoints.", caption: "Full session, start to finish.", hashtags: ["studiovlog", "songwriting"], why: "Studio sessions keep viewers longest on YouTube.", status: "scheduled", example: true },
+  ];
+}
+function defaultDeals() {
+  return [
+    { id: "d1", brand: "Nordtone Audio", what: "1 TikTok + 1 Instagram reel featuring studio headphones", offer: 1800, platform: "instagram", stage: "new", due: NOW + 4 * DAY, usage: "Organic only, 30 days", exclusivity: "None", contact: "creators@nordtone.example", note: "Want posts live before their launch in 2 weeks." },
+    { id: "d2", brand: "Keyline Synths", what: "YouTube integration (60-90s) in a studio video", offer: 2400, platform: "youtube", stage: "negotiating", due: NOW + 9 * DAY, usage: "Paid ads usage, 6 months", exclusivity: "3 months, all synth brands", contact: "partners@keyline.example", note: "You countered at €3,500. Waiting on reply." },
+    { id: "d3", brand: "Studiohaus Berlin", what: "2 reels from a sponsored studio day", offer: 3000, platform: "instagram", stage: "confirmed", due: NOW + 15 * DAY, usage: "Organic + whitelisting, 60 days", exclusivity: "Recording studios in Berlin, 30 days", contact: "hello@studiohaus.example", note: "Contract signed. Shoot booked for the 14th." },
+    { id: "d4", brand: "Lumen Strings", what: "Instagram carousel for a guitar string launch", offer: 1200, platform: "instagram", stage: "paid", due: NOW - 6 * DAY, usage: "Organic only", exclusivity: "None", contact: "hi@lumenstrings.example", note: "Paid on time." },
+    { id: "d5", brand: "SpinPlay Casino", what: "Story mention with a promo code", offer: 4000, platform: "instagram", stage: "new", due: NOW + 2 * DAY, usage: "Organic", exclusivity: "None", contact: "affiliates@spinplay.example", note: "Online casino." },
+  ];
+}
+function defaultNotifs() {
+  const ig = genPostsCache.instagram, tt = genPostsCache.tiktok;
+  const hot = [...within([...ig, ...tt], 4)].sort((a, b) => b.views - a.views)[0];
+  const avg = mean(within([...ig, ...tt], 28).map((p) => p.views));
+  const n = [
+    { id: "n1", type: "perf", icon: "fire", title: hot ? `"${hot.caption.replace(/^[^:?]+[:?]\s*/, "")}" is taking off` : "A post is taking off", body: hot ? `${k(hot.views)} views on ${PL[hot.platform]}, ${(hot.views / avg).toFixed(1)}× your average. Post a follow-up within 48 hours.` : "", at: NOW - 2 * 3600e3, read: false, go: "performance" },
+    { id: "n2", type: "deal", icon: "deal", title: "New offer from Nordtone Audio", body: "€1,800 for a TikTok + reel. Your manager thinks it's slightly under your rate.", at: NOW - 5 * 3600e3, read: false, go: "deal:d1" },
+    { id: "n3", type: "remind", icon: "clock", title: "Post tonight at 20:00", body: '"Drums that hit harder in 3 steps" is scheduled for TikTok. Your audience peaks at 20:00.', at: NOW - 7 * 3600e3, read: false, go: "growth" },
+    { id: "n4", type: "perf", icon: "alert", title: "Engagement rate dipped", body: "Likes per view fell over the last 28 days while reach grew. Your manager has ideas.", at: NOW - 26 * 3600e3, read: false, go: "chat:Why is my engagement rate down while reach is up?" },
+    { id: "n5", type: "report", icon: "doc", title: "Your weekly report is ready", body: "3 wins, 2 things to watch and your priorities for this week.", at: NOW - 2 * DAY, read: true, go: "results" },
+    { id: "n6", type: "account", icon: "link", title: "YouTube access expires in 5 days", body: "Reconnect so your manager keeps seeing your analytics.", at: NOW - 3 * DAY, read: true, go: "accounts" },
+    { id: "n7", type: "deal", icon: "alert", title: "SpinPlay Casino offer flagged", body: "This brand breaks your 'no gambling' boundary. Suggested: decline.", at: NOW - 3 * DAY - 3600e3, read: true, go: "deal:d5" },
+  ];
+  return n;
+}
+const genPostsCache = {}; for (const p of Object.keys(ACCOUNTS)) genPostsCache[p] = genPosts(p);
+const KEY = "mepa-studio-v2";
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch { saved = {}; }
+const S = {
+  profile: { ...DEFAULT_PROFILE, ...(saved.profile || {}) },
+  connected: saved.connected || { instagram: true, tiktok: true, youtube: true },
+  plan: saved.plan || defaultPlan(),
+  deals: saved.deals || defaultDeals(),
+  notifs: saved.notifs || defaultNotifs(),
+  prefs: { perf: true, deal: true, remind: true, report: true, account: true, inapp: true, email: true, push: false, ...(saved.prefs || {}) },
+  memory: saved.memory || [],
+  kit: { rates: true, bio: "Nova makes music in a tiny Munich studio and shows every step: the beats, the gear, the bad days and the finished songs.", email: "hello@novarae.example", ...(saved.kit || {}) },
+  reports: saved.reports || [],
+  livePushed: !!saved.livePushed,
+  chat: [], focus: null, perfDays: 28, perfPf: "all", studio: null,
+  data: {},
+};
+function persist() { try { localStorage.setItem(KEY, JSON.stringify({ profile: S.profile, connected: S.connected, plan: S.plan, deals: S.deals, notifs: S.notifs, prefs: S.prefs, memory: S.memory, kit: S.kit, reports: S.reports, livePushed: S.livePushed })); } catch {} }
+for (const p of Object.keys(ACCOUNTS)) S.data[p] = { posts: genPostsCache[p], snaps: genSnaps(p) };
+const platforms = () => Object.keys(ACCOUNTS).filter((p) => S.connected[p]);
+const allPosts = (pf = "all") => platforms().filter((p) => pf === "all" || p === pf).flatMap((p) => S.data[p].posts).sort((a, b) => b.at - a.at);
+const followers = (p) => S.data[p].snaps.at(-1).followers;
+function totalSnaps(pf = "all") { const ps = platforms().filter((p) => pf === "all" || p === pf); if (!ps.length) return []; return S.data[ps[0]].snaps.map((s, i) => ({ day: s.day, followers: ps.reduce((a, p) => a + S.data[p].snaps[i].followers, 0) })); }
+
+/* ======================================================= Claude access */
+let samplePromise = null;
+const getSample = () => (samplePromise ??= window.claude?.use ? window.claude.use("sample").catch(() => null) : Promise.resolve(null));
+let aiState = "unknown";
+const permanentOff = (e) => ["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(e?.code);
+const errCopy = (e) => ({ rate_limited: "Too many requests right now. Wait a minute and try again.", session_expired: "Your Claude session expired. Sign in again to use live Mepa." }[e?.code] || "Mepa couldn't answer just now. Try again in a moment.");
+const OFF_NOTE = "Live AI isn't available in this view, so this is Mepa's built-in answer from your numbers.";
+
+function md(src) {
+  const inline = (s) => s.replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+  let html = "", list = null; const close = () => { if (list) { html += `</${list}>`; list = null; } };
+  for (const raw of esc(src).split("\n")) {
+    const line = raw.trimEnd(); let m;
+    if ((m = /^#{1,4}\s+(.*)/.exec(line))) { close(); html += `<h4>${inline(m[1])}</h4>`; }
+    else if ((m = /^\s*[-*•]\s+(.*)/.exec(line))) { if (list !== "ul") { close(); html += "<ul>"; list = "ul"; } html += `<li>${inline(m[1])}</li>`; }
+    else if ((m = /^\s*\d+[.)]\s+(.*)/.exec(line))) { if (list !== "ol") { close(); html += "<ol>"; list = "ol"; } html += `<li>${inline(m[1])}</li>`; }
+    else if (!line.trim()) close();
+    else { close(); html += `<p>${inline(line)}</p>`; }
+  }
+  close(); return html;
+}
+
+/* ============================================================ artwork */
+function mascotSVG(id = "m") {
+  return `<svg viewBox="0 0 160 160" aria-hidden="true"><defs><radialGradient id="${id}f" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#c6aef7"/><stop offset="1" stop-color="#7d5bd0"/></radialGradient></defs>
+  <circle cx="80" cy="82" r="72" fill="#f3cf52"/>
+  <path d="M47 50 40 22 64 40z M113 50 120 22 96 40z" fill="url(#${id}f)"/><path d="M48 44 45 30 57 39z M112 44 115 30 103 39z" fill="#f2a7c9"/>
+  <ellipse cx="80" cy="112" rx="44" ry="40" fill="url(#${id}f)"/>
+  <circle cx="80" cy="72" r="40" fill="url(#${id}f)"/>
+  ${[[44, 70], [116, 70], [52, 96], [108, 96], [60, 40], [100, 40], [80, 34]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="9" fill="url(#${id}f)"/>`).join("")}
+  <ellipse cx="66" cy="74" rx="11" ry="13" fill="#fff"/><ellipse cx="94" cy="74" rx="11" ry="13" fill="#fff"/>
+  <circle cx="68" cy="77" r="6" fill="#231a3a"/><circle cx="96" cy="77" r="6" fill="#231a3a"/><circle cx="70" cy="74" r="2" fill="#fff"/><circle cx="98" cy="74" r="2" fill="#fff"/>
+  <ellipse cx="56" cy="90" rx="6" ry="3.5" fill="#f28fb8" opacity=".7"/><ellipse cx="104" cy="90" rx="6" ry="3.5" fill="#f28fb8" opacity=".7"/>
+  <path d="M72 92q8 8 16 0" stroke="#231a3a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M38 74a42 42 0 0 1 84 0" stroke="#1f8f7a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <rect x="30" y="64" width="16" height="26" rx="7" fill="#1f8f7a"/><rect x="114" y="64" width="16" height="26" rx="7" fill="#1f8f7a"/>
+  <ellipse cx="128" cy="112" rx="11" ry="13" fill="url(#${id}f)" transform="rotate(-25 128 112)"/>
+  <ellipse cx="66" cy="148" rx="12" ry="7" fill="#7d5bd0"/><ellipse cx="94" cy="148" rx="12" ry="7" fill="#7d5bd0"/></svg>`;
+}
+function studioSVG() {
+  return `<svg viewBox="0 0 260 170" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="studioArt">
+  <rect width="260" height="170" fill="#f6efe0"/>
+  <g data-depth="4"><path d="M20 130c10-30 30-40 40-70" stroke="#4f8a5b" stroke-width="3" fill="none"/>${[[36, 96, -30], [48, 78, 20], [30, 112, 40], [56, 66, -20]].map(([x, y, r]) => `<ellipse cx="${x}" cy="${y}" rx="12" ry="6" fill="#6aa66f" transform="rotate(${r} ${x} ${y})"/>`).join("")}<rect x="14" y="128" width="34" height="26" rx="4" fill="#d9825b"/></g>
+  <g data-depth="8"><rect x="58" y="104" width="150" height="38" rx="6" fill="#2b2f36"/><rect x="64" y="110" width="138" height="26" rx="3" fill="#fbf8f1"/>${Array.from({ length: 13 }, (_, i) => `<line x1="${64 + i * 10.6}" y1="110" x2="${64 + i * 10.6}" y2="136" stroke="#c9c3b6"/>`).join("")}${[0, 1, 3, 4, 5, 7, 8, 10, 11].map((i) => `<rect x="${71 + i * 10.6}" y="110" width="6" height="15" fill="#2b2f36"/>`).join("")}${[0, 1, 2, 3].map((i) => `<circle cx="${78 + i * 14}" cy="${100}" r="3" fill="#e8b04a"/>`).join("")}</g>
+  <g data-depth="12"><rect x="198" y="46" width="6" height="64" rx="3" fill="#3a3f47"/><rect x="186" y="22" width="30" height="40" rx="15" fill="#d34f3a"/><g stroke="#fbf8f1" stroke-width="2">${[30, 38, 46].map((y) => `<line x1="192" y1="${y}" x2="210" y2="${y}"/>`).join("")}</g><rect x="184" y="106" width="34" height="8" rx="4" fill="#3a3f47"/></g>
+  <g data-depth="6"><path d="M110 64a22 22 0 0 1 44 0" stroke="#1f8f7a" stroke-width="5" fill="none"/><rect x="104" y="60" width="12" height="20" rx="5" fill="#1f8f7a"/><rect x="148" y="60" width="12" height="20" rx="5" fill="#1f8f7a"/></g>
+  <g data-depth="3"><circle cx="232" cy="140" r="17" fill="#f3cf52"/><text x="232" y="147" text-anchor="middle" font-size="18" fill="#2b2f36">♪</text></g>
+  <rect x="12" y="12" width="94" height="20" rx="5" fill="#1f3b37"/><text x="59" y="26" text-anchor="middle" font-size="10" font-weight="800" fill="#f6f1e5" letter-spacing="1.2" font-family="Plus Jakarta Sans, system-ui, sans-serif">STUDIO NOTES</text>
+  </svg>`;
+}
+
+/* ============================================================== shell */
+const TABS = [["overview", "Overview", "Your story today", "home"], ["performance", "Performance", "Understand the past", "perf"], ["growth", "Growth plan", "See what's next", "growth"], ["studio", "Post studio", "Make it happen", "studio"], ["results", "Results", "Learn from reality", "results"], ["chat", "Mepa chat", "Ask your numbers", "chat"]];
+const EXTRA = { deals: "Brand deals", kit: "Media kit", accounts: "Connected accounts", profile: "Profile & notifications" };
+let current = "overview";
+function route() { const h = location.hash.replace("#", ""); current = TABS.some(([key]) => key === h) || EXTRA[h] ? h : "overview"; closePop(); render(); window.scrollTo(0, 0); }
+const unread = () => S.notifs.filter((n) => !n.read && S.prefs[n.type] !== false).length;
+function renderShell() {
+  $("#tabs").innerHTML = TABS.map(([key, t, s, ic]) => `<a class="tab" href="#${key}" ${key === current ? 'aria-current="page"' : ""}>${I(ic)}<span><span class="tt">${t}</span><span class="ts">${s}</span></span></a>`).join("");
+  const u = unread();
+  $("#bell").innerHTML = I("bell") + (u ? `<span class="dotcount">${u}</span>` : "");
+  $("#bell").setAttribute("aria-label", `Notifications, ${u} unread`);
+  $("#meBtn").textContent = S.profile.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+}
+function head(title, sub, right = "") {
+  const label = TABS.find(([key]) => key === current)?.[1] || EXTRA[current];
+  return `<div class="crumb"><span>@${esc(S.profile.handle)}</span><span>/</span><span>${label}</span></div><div class="pagehead"><div><h1>${title}</h1><p>${sub}</p></div>${right}</div>`;
+}
+const after = {};
+function render() {
+  renderShell();
+  const v = { overview: vOverview, performance: vPerformance, growth: vGrowth, studio: vStudio, results: vResults, chat: vChat, deals: vDeals, kit: vKit, accounts: vAccounts, profile: vProfile }[current];
+  $("#view").innerHTML = v();
+  after[current]?.();
+}
+function toast(msg, action) {
+  const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status");
+  t.innerHTML = `<span>${esc(msg)}</span>${action ? `<button>${esc(action.label)}</button>` : ""}`;
+  if (action) t.querySelector("button").onclick = () => { t.remove(); action.run(); };
+  $("#toasts").append(t); setTimeout(() => t.remove(), action ? 7000 : 2800);
+}
+function deltaChip(v, label = "vs prior 28d") {
+  if (v == null || !isFinite(v)) return `<span class="d flat">— Not enough history</span>`;
+  const up = v >= 0;
+  return `<span class="d ${up ? "up" : "down"}">${I(up ? "arrow" : "arrow", 12).replace("<svg", `<svg style="transform:${up ? "none" : "rotate(90deg)"}"`)} ${pct(Math.abs(v))} ${label}</span>`;
+}
+
+/* ============================================================ Overview */
+function vOverview() {
+  const posts = allPosts(), c = compare(posts, 28), snaps = totalSnaps();
+  const total = platforms().reduce((a, p) => a + followers(p), 0);
+  const net = snaps.length ? snaps.at(-1).followers - snaps.at(-29).followers : 0, netPrev = snaps.length > 57 ? snaps.at(-29).followers - snaps.at(-57).followers : 0;
+  const hooks = breakdown(within(posts, 90), "hook"), topics = breakdown(within(posts, 90), "topic"), slot = bestTimes(within(posts, 120), ACTIVE)[0];
+  const fc = forecast();
+  return `${head("Your story today", "A quick look back. A clearer next move.", `<span class="period">Last 28 days</span>`)}
+  <div class="cols"><div class="stack">
+    <section class="card"><div class="hero"><div>
+      <div class="idrow"><span class="av">${esc(S.profile.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase())}</span><div style="min-width:0"><div class="row between"><span class="handle">@${esc(S.profile.handle)}</span><span class="tag">Demo data</span></div><p class="muted small">${esc(S.profile.niche)} · ${esc(S.profile.city)}</p></div></div>
+      <div class="plats">${platforms().map((p) => `<span class="plat"><i class="sw ${p}"></i>${PL[p]} <b class="num">${k(followers(p))}</b></span>`).join("") || `<a class="chip" href="#accounts">Connect an account</a>`}</div>
+      <p class="small muted row" style="margin-top:10px">${I("sync", 14)} ${allPosts().length} post rows · synced 06:00 CET</p>
+      <div class="row" style="margin-top:14px"><a class="chip" href="#performance">${I("look", 14)} Look back</a><a class="chip" href="#studio">${I("plan", 14)} Plan a post</a><a class="chip" href="#chat">${I("chat", 14)} Ask Mepa</a></div>
+    </div><div class="illu" id="illu">${studioSVG()}<span class="cap">Move to explore</span></div></div>
+    <div class="viewas"><span>Agency staff · Viewing as creator</span><label class="row">Creator <select id="creatorSel"><option>@${esc(S.profile.handle)}</option><option value="add">+ Add a creator (Agency plan)</option></select></label></div></section>
+    <div class="grid4">
+      <a class="kpi k1" href="#performance"><span class="go">${I("arrow", 14)}</span><span class="l">Reach</span><span class="v num">${k(c.c.reach)}</span>${deltaChip(c.dReach)}</a>
+      <a class="kpi k2" href="#performance"><span class="go">${I("arrow", 14)}</span><span class="l">Engagement rate</span><span class="v num">${pct(c.c.avgEr, 2)}</span>${deltaChip(c.dEr)}</a>
+      <a class="kpi k3" href="#performance"><span class="go">${I("arrow", 14)}</span><span class="l">Net new followers</span><span class="v num">+${k(net)}</span>${deltaChip(netPrev ? (net - netPrev) / netPrev : null)}</a>
+      <a class="kpi k4" href="#accounts"><span class="go">${I("arrow", 14)}</span><span class="l">Total audience</span><span class="v num">${k(total)}</span><span class="d flat">${platforms().length} platforms combined</span></a>
+    </div>
+    <div><div class="moves-h"><h2>Your next move starts here.</h2><span class="small muted">Look back → Plan → Create</span></div>
+    <div class="grid3">
+      <a class="move m1" href="#performance"><span class="row between eyebrow">01 / Look back ${I("look", 16)}</span><h3>${c.dReach >= 0 ? "Reach is up." : "Reach is down."} ${c.dEr < 0 ? "Engagement is softer." : "Engagement is up too."}</h3><p>${pct(Math.abs(c.dReach ?? 0))} ${c.dReach >= 0 ? "more" : "less"} reach, with engagement rate ${c.dEr < 0 ? "down" : "up"} ${pct(Math.abs(c.dEr ?? 0))} versus the prior 28 days.</p><span class="foot">Understand the change ${I("right", 16)}</span></a>
+      <a class="move m2" href="#growth"><span class="row between eyebrow">02 / Plan ${I("plan", 16)}</span><h3>Give your forecast a stronger plan.</h3><p>Your current plan supports about +${k(fc.planned)} followers over 28 days. Following Mepa's plan, the forecast says +${k(fc.boosted)}.</p><span class="foot">Review what it takes ${I("right", 16)}</span></a>
+      <a class="move m3" href="#studio"><span class="row between eyebrow">03 / Create ${I("studio", 16)}</span><h3>Make the next post intentional.</h3><p>Choose a format, an opening and a publishing slot. ${hooks[0] ? `${HOOK[hooks[0].key]} openings about ${topics[0].key} at ${slot?.label} are your best bet.` : ""} See the range before you commit.</p><span class="foot">Open your post studio ${I("right", 16)}</span></a>
+    </div></div>
+  </div>
+  <div class="stack">
+    <section class="card side"><div><span class="eyebrow">Your studio sidekick</span><h2>Meet Mepa.</h2><p>Your numbers, made human. Ask about your next move.</p><a class="btn btn-cta" href="#chat" style="margin-top:14px">Chat with Mepa ${I("arrow", 14)}</a></div>
+      <button class="mascot" data-act="mascot" aria-label="Chat with Mepa">${mascotSVG("hm")}<span class="pill">Tap me to chat</span></button>
+      <div class="grounded">${I("db", 14)} Grounded in @${esc(S.profile.handle)}'s own numbers</div></section>
+    <section class="card"><h2>Your audience, at a glance</h2><p class="small muted">Tap a platform to focus.</p><div id="donut"></div></section>
+  </div></div>`;
+}
+after.overview = () => {
+  renderDonut();
+  const art = $("#studioArt"), box = $("#illu");
+  if (art && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    box.addEventListener("pointermove", (e) => { const r = box.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5; art.querySelectorAll("[data-depth]").forEach((g) => { const d = +g.dataset.depth; g.setAttribute("transform", `translate(${-dx * d} ${-dy * d})`); }); });
+    box.addEventListener("pointerleave", () => art.querySelectorAll("[data-depth]").forEach((g) => g.removeAttribute("transform")));
+  }
+  $("#creatorSel").addEventListener("change", (e) => { if (e.target.value === "add") { e.target.selectedIndex = 0; modal(`<h2>Agency workspace</h2><p>Managers and agencies can run many creators from one workspace: switch creators here, share notes and see a roster overview.</p><p class="muted small">This demo includes one creator.</p><div class="row" style="justify-content:flex-end"><button class="btn btn-dark" data-act="close">Got it</button></div>`); } });
+};
+function renderDonut() {
+  const el = $("#donut"); if (!el) return;
+  const ps = platforms(), vals = ps.map((p) => followers(p)), total = vals.reduce((a, b) => a + b, 0) || 1;
+  const R = 80, r = 56, C = 95; let a0 = -Math.PI / 2;
+  const arc = (s, e, rr) => [Math.cos(s) * rr + C, Math.sin(s) * rr + C, Math.cos(e) * rr + C, Math.sin(e) * rr + C];
+  const gap = ps.length > 1 ? 0.025 : 0;
+  const segs = ps.map((p, i) => { const sweep = (vals[i] / total) * Math.PI * 2, s = a0 + gap, e = a0 + sweep - gap; a0 += sweep; const [x1, y1, x2, y2] = arc(s, e, R), [x3, y3, x4, y4] = arc(e, s, r), large = e - s > Math.PI ? 1 : 0; const dim = S.focus && S.focus !== p; return `<path d="M${x1},${y1} A${R},${R} 0 ${large} 1 ${x2},${y2} L${x3},${y3} A${r},${r} 0 ${large} 0 ${x4},${y4}Z" fill="var(--s-${p === "instagram" ? "ig" : p === "tiktok" ? "tt" : "yt"})" opacity="${dim ? 0.25 : 1}" data-act="focus" data-p="${p}"><title>${PL[p]}: ${vals[i].toLocaleString("en")} followers (${pct(vals[i] / total, 0)})</title></path>`; });
+  const shown = S.focus ? followers(S.focus) : total;
+  el.innerHTML = `<div class="donut-wrap"><svg class="donut" viewBox="0 0 190 190" role="img" aria-label="Followers by platform">${segs.join("")}<text x="95" y="96" text-anchor="middle" font-size="24" font-weight="800" fill="var(--ink)" font-family="var(--font)">${k(shown)}</text><text x="95" y="114" text-anchor="middle" font-size="10" fill="var(--ink-3)" font-family="var(--font)">${S.focus ? PL[S.focus] + " followers" : "combined followers"}</text></svg></div>
+  <div class="legend-list">${ps.map((p, i) => `<button class="lrow" data-act="focus" data-p="${p}" aria-pressed="${S.focus === p}"><span class="row"><i class="sw ${p}"></i>${PL[p]}</span><b class="num">${k(vals[i])}</b></button>`).join("")}</div>
+  <p class="note" style="margin-top:10px">Combined platform follows, not unique people. Click the selected platform again to show all.</p>`;
+}
+function forecast() {
+  const snaps = totalSnaps(); if (snaps.length < 29) return { planned: 0, boosted: 0, perDay: 0 };
+  const perDay = (snaps.at(-1).followers - snaps.at(-29).followers) / 28;
+  const planned = Math.round(perDay * 28 * (1 + 0.04 * S.plan.filter((x) => x.status === "scheduled" && x.day > NOW - DAY).length));
+  return { perDay, planned, boosted: Math.round(planned * 1.45) };
+}
+
+/* ========================================================= Performance */
+function vPerformance() {
+  const d = S.perfDays, pf = S.perfPf, posts = allPosts(pf), c = compare(posts, d), snaps = totalSnaps(pf);
+  const net = snaps.length > d ? snaps.at(-1).followers - snaps.at(-1 - d).followers : 0;
+  const fm = breakdown(within(posts, 90), "format"), hk = breakdown(within(posts, 90), "hook"), tp = breakdown(within(posts, 90), "topic");
+  const slots = bestTimes(within(posts, 120), ACTIVE), top = within(posts, d).sort((a, b) => b.views - a.views).slice(0, 6);
+  const chips = `<div class="row">${["all", ...platforms()].map((p) => `<button class="chip" data-act="perfpf" data-v="${p}" aria-pressed="${pf === p}">${p === "all" ? "All" : PL[p]}</button>`).join("")}<span style="width:8px"></span>${[28, 90].map((n) => `<button class="chip" data-act="perfdays" data-v="${n}" aria-pressed="${d === n}">${n} days</button>`).join("")}</div>`;
+  return `${head("Understand the past", "What happened, and why. Every number here comes from your connected accounts.", chips)}
+  <div class="grid4">
+    <div class="kpi k1"><span class="l">Reach</span><span class="v num">${k(c.c.reach)}</span>${deltaChip(c.dReach, `vs prior ${d}d`)}</div>
+    <div class="kpi k2"><span class="l">Avg. views per post</span><span class="v num">${k(c.c.avgViews)}</span>${deltaChip(c.dViews, `vs prior ${d}d`)}</div>
+    <div class="kpi k3"><span class="l">Engagement rate</span><span class="v num">${pct(c.c.avgEr, 2)}</span>${deltaChip(c.dEr, `vs prior ${d}d`)}</div>
+    <div class="kpi k4"><span class="l">Net new followers</span><span class="v num">+${k(net)}</span><span class="d flat">${c.c.posts} posts in ${d} days</span></div>
+  </div>
+  <section class="card" style="margin-top:16px"><div class="card-head"><h2>Followers${pf === "all" ? ", all platforms" : ", " + PL[pf]}</h2><span class="note">Last 90 days · hover for daily totals</span></div><div class="chart-wrap" id="growthChart"></div></section>
+  <div class="grid3" style="margin-top:16px">
+    <section class="card"><div class="card-head"><h2>By format</h2><span class="note">avg. views, 90d</span></div>${bars(fm.map((r) => ({ label: FMT[r.key], v: r.avgViews, d: `${r.posts} posts · ${pct(r.avgEr)} engagement · ${r.lift.toFixed(2)}×` })))}</section>
+    <section class="card"><div class="card-head"><h2>By opening</h2><span class="note">avg. views, 90d</span></div>${bars(hk.map((r) => ({ label: HOOK[r.key], v: r.avgViews, d: `${r.posts} posts · ${pct(r.avgEr)} engagement · ${r.lift.toFixed(2)}×` })))}</section>
+    <section class="card"><div class="card-head"><h2>By topic</h2><span class="note">avg. views, 90d</span></div>${bars(tp.map((r) => ({ label: r.key[0].toUpperCase() + r.key.slice(1), v: r.avgViews, d: `${r.posts} posts · ${pct(r.avgEr)} engagement · ${r.lift.toFixed(2)}×` })))}</section>
+  </div>
+  <section class="card" style="margin-top:16px"><div class="card-head"><h2>When your audience is online</h2><span class="note" id="heatTip">Hover a cell. Outlined cells are your best slots.</span></div>${heatmap(ACTIVE, slots)}</section>
+  <section class="card" style="margin-top:16px"><div class="card-head"><h2>Top posts, last ${d} days</h2></div><div class="table-scroll"><table><thead><tr><th>Post</th><th>Format</th><th class="r">Views</th><th class="r">Engagement</th><th class="r">Saves</th><th class="r">Shares</th></tr></thead><tbody>
+  ${top.map((p) => `<tr><td><div class="cap1">${esc(p.caption)}</div><div class="note row"><i class="sw ${p.platform}"></i>${PL[p.platform]} · ${dl(p.at)}</div></td><td>${FMT[p.format]}</td><td class="r num">${k(p.views)}</td><td class="r num">${pct(er(p))}</td><td class="r num">${p.platform === "instagram" ? k(p.saves) : "–"}</td><td class="r num">${k(p.shares)}</td></tr>`).join("")}</tbody></table></div></section>`;
+}
+after.performance = () => growthChart($("#growthChart"), totalSnaps(S.perfPf).slice(-90));
+function bars(rows) { const mx = Math.max(...rows.map((r) => r.v), 1); return `<div class="bars">${rows.map((r) => `<div class="bar-row" tabindex="0"><div class="bar-top"><span>${esc(r.label)}</span><span class="num" style="font-weight:700">${k(r.v)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(2, (r.v / mx) * 100)}%"></div></div><div class="bar-detail">${esc(r.d)}</div></div>`).join("")}</div>`; }
+function heatmap(grid, slots) {
+  const order = [1, 2, 3, 4, 5, 6, 0], best = (d, h) => slots.some((s) => s.wd === d && s.h === h), col = (v) => `color-mix(in oklab, var(--brand) ${Math.round(6 + v * 90)}%, var(--surface-2))`;
+  let html = `<div class="heat-scroll"><div class="heat"><span></span>${Array.from({ length: 24 }, (_, h) => `<span class="hl">${h % 3 === 0 ? h : ""}</span>`).join("")}`;
+  for (const d of order) { html += `<span class="dl">${WD[d]}</span>`; for (let h = 0; h < 24; h++) html += `<span class="cell${best(d, h) ? " best" : ""}" style="background:${col(grid[d][h])}" data-tip="${WD[d]} ${String(h).padStart(2, "0")}:00 · ${Math.round(grid[d][h] * 100)}% of peak${best(d, h) ? " · recommended slot" : ""}"></span>`; }
+  return html + `</div></div><div class="row between" style="margin-top:10px"><div class="row">${slots.map((s) => `<span class="tag">${s.label}</span>`).join("")}</div><span class="legend">Quiet ${[0, 0.25, 0.5, 0.75, 1].map((v) => `<i style="background:${col(v)}"></i>`).join("")} Busy</span></div>`;
+}
+function growthChart(el, data) {
+  if (!el || data.length < 2) return;
+  const W = 820, H = 220, P = { t: 14, r: 14, b: 26, l: 54 }, ys = data.map((d) => d.followers);
+  let lo = Math.min(...ys), hi = Math.max(...ys); const sp = Math.max(hi - lo, 1); lo -= sp * 0.08; hi += sp * 0.08;
+  const x = (i) => P.l + (i / (data.length - 1)) * (W - P.l - P.r), y = (v) => P.t + (1 - (v - lo) / (hi - lo)) * (H - P.t - P.b);
+  const path = data.map((d, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(d.followers).toFixed(1)}`).join(""), every = Math.ceil(data.length / 6);
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Followers from ${k(ys[0])} to ${k(ys.at(-1))}">
+  ${[0.15, 0.5, 0.85].map((f) => lo + (hi - lo) * f).map((t) => `<line x1="${P.l}" x2="${W - P.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${P.l - 8}" y="${y(t) + 4}" text-anchor="end" font-size="11" fill="var(--ink-3)" font-family="var(--font)">${k(t)}</text>`).join("")}
+  ${data.map((d, i) => (i % every === 0 ? `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--ink-3)" font-family="var(--font)">${dl(d.day, { day: "numeric", month: "short" })}</text>` : "")).join("")}
+  <path d="${path}L${x(data.length - 1)},${H - P.b}L${x(0)},${H - P.b}Z" fill="var(--brand)" opacity="0.1"/><path d="${path}" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="${x(data.length - 1)}" cy="${y(ys.at(-1))}" r="4" fill="var(--brand)" stroke="var(--surface)" stroke-width="2"/>
+  <g class="hv" visibility="hidden"><line class="hl" y1="${P.t}" y2="${H - P.b}" stroke="var(--ink-3)" stroke-dasharray="3 3"/><circle class="hc" r="5" fill="var(--brand)" stroke="var(--surface)" stroke-width="2"/></g></svg><div class="tip" hidden></div>`;
+  const svg = el.querySelector("svg"), tip = el.querySelector(".tip"), g = el.querySelector(".hv");
+  svg.addEventListener("pointermove", (e) => { const r = svg.getBoundingClientRect(), px = ((e.clientX - r.left) / r.width) * W, i = Math.max(0, Math.min(data.length - 1, Math.round(((px - P.l) / (W - P.l - P.r)) * (data.length - 1)))); g.setAttribute("visibility", "visible"); g.querySelector(".hl").setAttribute("x1", x(i)); g.querySelector(".hl").setAttribute("x2", x(i)); g.querySelector(".hc").setAttribute("cx", x(i)); g.querySelector(".hc").setAttribute("cy", y(data[i].followers)); tip.hidden = false; tip.innerHTML = `<div class="muted">${dl(data[i].day)}</div><div class="num" style="font-weight:700">${data[i].followers.toLocaleString("en")} followers</div>`; const left = (x(i) / W) * 100; tip.style.left = left + "%"; tip.style.transform = left > 60 ? "translateX(-108%)" : "translateX(8%)"; });
+  svg.addEventListener("pointerleave", () => { g.setAttribute("visibility", "hidden"); tip.hidden = true; });
+}
+
+/* ========================================================= Growth plan */
+function vGrowth() {
+  const days = Array.from({ length: 7 }, (_, i) => at0(i, 0)), live = S.plan.filter((x) => x.status !== "dismissed");
+  const backlog = live.filter((x) => !x.day || x.day < at0(0, 0) || x.day >= at0(7, 0)), fc = forecast(), snaps = totalSnaps();
+  const card = (x) => `<button class="idea ${x.status === "posted" ? "posted" : ""}" data-act="idea" data-id="${x.id}"><span class="t">${esc(x.title)}</span><span class="m"><i class="sw ${x.platform}"></i>${FMT[x.format]}${x.day ? " · " + tl(x.day) : ""}${x.example ? " · example" : ""}</span></button>`;
+  return `${head("See what's next", "Your next 7 days, and what they add up to.", `<div class="row"><span class="note" id="planNote"></span><button class="btn btn-dark" data-act="genplan" id="genPlan">${I("plan", 16)} Plan my week with Mepa</button></div>`)}
+  <div class="grid3">
+    <div class="kpi k3"><span class="l">Followers today</span><span class="v num">${snaps.length ? k(snaps.at(-1).followers) : "–"}</span><span class="d flat">+${k(Math.round(fc.perDay))} a day lately</span></div>
+    <div class="kpi k2"><span class="l">Forecast, next 28 days, current plan</span><span class="v num">+${k(fc.planned)}</span><span class="d flat">${S.plan.filter((x) => x.status === "scheduled" && x.day > NOW - DAY).length} posts scheduled</span></div>
+    <div class="kpi k1"><span class="l">Forecast with Mepa's plan</span><span class="v num">+${k(fc.boosted)}</span><span class="d flat">4-5 posts a week on your best slots</span></div>
+  </div>
+  <p class="note" style="margin-block:8px 16px">Forecasts are estimates from your recent growth rate and posting pattern, not promises.</p>
+  <div class="week">${days.map((d, i) => `<div class="day ${i === 0 ? "today" : ""}"><div class="day-h"><span>${i === 0 ? "Today" : WD[new Date(d).getDay()]}</span><span class="num">${new Date(d).getDate()}</span></div>${live.filter((x) => x.day && x.day >= d && x.day < d + DAY).sort((a, b) => a.day - b.day).map(card).join("") || `<span class="note">Open slot</span>`}</div>`).join("")}</div>
+  <section class="card" style="margin-top:16px"><div class="card-head"><h2>Idea backlog</h2><a class="chip" href="#studio">${I("studio", 14)} New post in studio</a></div><div style="display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">${backlog.map(card).join("") || `<p class="muted">Ideas you save from chat or the studio land here.</p>`}</div></section>`;
+}
+function addIdeas(ideas) {
+  let n = 0;
+  for (const x of ideas.slice(0, 10)) {
+    if (!x || !x.title) continue; let day = null;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(String(x.date || ""))) { const [h, m] = /^\d{1,2}:\d{2}$/.test(String(x.time || "")) ? String(x.time).split(":").map(Number) : [20, 0]; const d = new Date(x.date + "T00:00:00"); d.setHours(h, m, 0, 0); if (!isNaN(d)) day = d.getTime(); }
+    S.plan.push({ id: "p" + Math.random().toString(36).slice(2, 9), day, platform: PL[x.platform] ? x.platform : "instagram", format: FMT[x.format] ? x.format : "reel", title: String(x.title), hook: String(x.hook || ""), description: String(x.description || ""), caption: String(x.caption || ""), hashtags: Array.isArray(x.hashtags) ? x.hashtags.map(String).slice(0, 8) : [], why: String(x.why || ""), status: day ? "scheduled" : "idea" });
+    n++;
+  }
+  persist(); return n;
+}
+function templateIdeas() {
+  const slots = bestTimes(within(allPosts(), 120), ACTIVE, 7);
+  const next = (wd, h) => { for (let i = 1; i <= 7; i++) { const d = new Date(at0(i, 0)); if (d.getDay() === wd) { d.setHours(h, 0, 0, 0); return d; } } return null; };
+  const T = [
+    { title: "Flip a sample in 60 seconds", platform: "tiktok", format: "short", hook: "Give me 60 seconds and one old record.", description: "Crate pick, chop, drums, final loop.", caption: "Should I finish this one?", hashtags: ["samplefllip", "producer"], why: "Beat-making + tutorial hooks are your strongest combo." },
+    { title: "5 plugins on every track (free alternatives)", platform: "instagram", format: "carousel", hook: "5 plugins I use on every song, plus free versions", description: "One slide per plugin, before/after audio in the caption link.", caption: "Save this for your next session.", hashtags: ["musicproduction", "plugins"], why: "Gear carousels earn your highest save rate." },
+    { title: "Can I write a hook from your comments?", platform: "tiktok", format: "short", hook: "Comment one word. I'll turn it into a chorus.", description: "Pick 3 comments, write live, play the result.", caption: "Drop your word 👇", hashtags: ["songwriting"], why: "Question openings get 2× your comments." },
+    { title: "Full session: from voice memo to master", platform: "youtube", format: "video", hook: "This voice memo became a finished song in 3 hours.", description: "Time-lapse with 4 talking-head checkpoints.", caption: "Every step, no cuts in the important parts.", hashtags: ["studiovlog"], why: "Studio sessions hold YouTube viewers longest." },
+    { title: "Drum processing chain explained", platform: "instagram", format: "reel", hook: "Save this: my drum chain in 4 plugins.", description: "Screen record + face cam, 4 quick steps.", caption: "Try it on your next beat.", hashtags: ["mixing", "drums"], why: "Tutorial reels at 20:00 are your best slot." },
+  ].filter((t) => S.connected[t.platform]);
+  return T.map((t, i) => { const s = slots[i % slots.length], d = s ? next(s.wd, s.h) : null; return { ...t, date: d ? isoDay(d) : null, time: d ? `${String(d.getHours()).padStart(2, "0")}:00` : null }; });
+}
+async function genPlan() {
+  const btn = $("#genPlan"); btn.disabled = true; btn.textContent = "Planning your week…";
+  const sample = aiState === "off" ? null : await getSample(); let n = 0, offline = false;
+  try {
+    if (!sample) throw { offline: true };
+    const ps = within(allPosts(), 90);
+    const ctx = { today: isoDay(NOW), weekday: WD[new Date(NOW).getDay()], platforms: platforms(), bestSlots: bestTimes(within(allPosts(), 120), ACTIVE, 7).map((s) => s.label), formats: breakdown(ps, "format").map((r) => ({ format: r.key, lift: +r.lift.toFixed(2) })), hooks: breakdown(ps, "hook").map((r) => ({ hook: r.key, lift: +r.lift.toFixed(2) })), topics: breakdown(ps, "topic").map((r) => ({ topic: r.key, lift: +r.lift.toFixed(2) })), alreadyPlanned: S.plan.filter((x) => x.status !== "dismissed").map((x) => x.title) };
+    const out = await sample.json(`You are Mepa, an AI manager for the creator below. Plan 5 specific posts for the next 7 days (from tomorrow) across their connected platforms, built on what works in their data, fitting about ${S.profile.hours} hours a week, in their voice, within their boundaries, not repeating what is already planned, each on a best slot.
+Creator: ${S.profile.name} (@${S.profile.handle}). ${S.profile.niche}. Goals: ${S.profile.goals}. Audience: ${S.profile.audience}. Voice: ${S.profile.voice}. Boundaries: ${S.profile.boundaries}.
+Data: ${JSON.stringify(ctx)}
+Reply with only JSON: {"ideas":[{"title":"","platform":"instagram|tiktok|youtube","format":"reel|carousel|image|video|short","hook":"exact opening line","description":"shot list, 1-2 sentences","caption":"","hashtags":[""],"why":"one sentence citing their numbers","date":"YYYY-MM-DD","time":"HH:MM"}]}`, { cache: false });
+    n = addIdeas((Array.isArray(out?.ideas) ? out.ideas : []).filter((x) => S.connected[x.platform])); aiState = "on";
+    if (!n) throw { code: "empty_completion" };
+  } catch (e) {
+    if (e?.offline || permanentOff(e)) { aiState = "off"; offline = true; n = addIdeas(templateIdeas()); }
+    else { render(); $("#planNote").textContent = errCopy(e); return; }
+  }
+  render(); toast(`Added ${n} posts to your plan`);
+  if (offline) $("#planNote").textContent = "Built by Mepa's offline planner (live AI unavailable here).";
+}
+function ideaDrawer(id) {
+  const x = S.plan.find((i) => i.id === id); if (!x) return;
+  drawer(`<div class="row between"><span class="tag"><i class="sw ${x.platform}"></i>${PL[x.platform]} · ${FMT[x.format]}</span><button class="btn btn-ghost btn-sm" data-act="close">Close</button></div>
+  <h2 style="font-size:1.4rem">${esc(x.title)}</h2><p class="muted">${x.day ? dl(x.day, { weekday: "long", day: "numeric", month: "long" }) + " at " + tl(x.day) : "Not scheduled yet"}</p>
+  ${x.hook ? `<div><div class="eyebrow muted">Opening</div><p style="font-size:1.05rem;margin-top:4px">“${esc(x.hook)}”</p></div>` : ""}
+  ${x.description ? `<div><div class="eyebrow muted">What to film</div><p style="margin-top:4px">${esc(x.description)}</p></div>` : ""}
+  ${x.caption ? `<div><div class="eyebrow muted">Caption</div><p style="margin-top:4px">${esc(x.caption)}</p><p style="color:var(--brand);margin-top:4px;font-weight:600">${x.hashtags.map((h) => "#" + esc(h.replace(/^#/, ""))).join(" ")}</p></div>` : ""}
+  ${x.why ? `<div class="kpi k4"><span class="eyebrow">Why this should work</span><p style="margin-top:4px">${esc(x.why)}</p></div>` : ""}
+  <div class="row"><button class="btn btn-dark" data-act="ideastatus" data-id="${x.id}" data-v="${x.status === "posted" ? "scheduled" : "posted"}">${x.status === "posted" ? "Mark as not posted" : "Mark as posted"}</button><button class="btn btn-ghost" data-act="copycap" data-id="${x.id}">Copy caption</button><button class="btn btn-ghost" data-act="ideastatus" data-id="${x.id}" data-v="dismissed">Remove</button></div>`);
+}
+
+/* =========================================================== Post studio */
+function studioState() { return (S.studio ??= { platform: platforms()[0] || "instagram", format: "", hook: "tutorial", topic: "beat making", slot: "", idea: "", caption: "", hashtags: "" }); }
+function estimate(st) {
+  const ps = within(S.data[st.platform].posts, 120), lift = (dim, v) => { const r = breakdown(ps, dim).find((x) => x.key === v); return r && r.posts >= 2 ? Math.min(2, Math.max(0.5, r.lift)) : 1; };
+  const views = ps.map((p) => p.views), med = quant(views, 0.5);
+  const f = { format: lift("format", st.format), hook: lift("hook", st.hook), topic: lift("topic", st.topic), time: st.slot && /\d{2}:/.test(st.slot) ? lift("hour", String(+st.slot.split(" ")[1].slice(0, 2))) : 1 };
+  const m = f.format * f.hook * f.topic * Math.sqrt(f.time);
+  return { f, low: Math.round(quant(views, 0.3) * m), mid: Math.round(med * m), high: Math.round(quant(views, 0.85) * m), max: quant(views, 0.97) * 2 };
+}
+function vStudio() {
+  const st = studioState(), fmts = ACCOUNTS[st.platform].formats.map(([f]) => f); if (!fmts.includes(st.format)) st.format = fmts[0];
+  const slots = bestTimes(within(S.data[st.platform].posts, 120), st.platform === "instagram" ? ACTIVE : ACTIVE, 5); if (!st.slot) st.slot = slots[0]?.label || "";
+  const seg = (name, opts, cur, lab = (o) => o) => `<div class="seg" role="group">${opts.map((o) => `<button class="chip" data-act="st" data-k="${name}" data-v="${esc(o)}" aria-pressed="${cur === o}">${esc(lab(o))}</button>`).join("")}</div>`;
+  return `${head("Make it happen", "Choose a format, an opening and a publishing slot. See the range before you commit.")}
+  <div class="cols"><section class="card" style="display:grid;gap:16px">
+    <div class="field"><label>Platform</label>${seg("platform", platforms(), st.platform, (o) => PL[o])}</div>
+    <div class="field"><label>Format</label>${seg("format", fmts, st.format, (o) => FMT[o])}</div>
+    <div class="field"><label>Opening</label>${seg("hook", HOOKS, st.hook, (o) => HOOK[o])}</div>
+    <div class="field"><label>Topic</label>${seg("topic", TOPICS, st.topic, (o) => o[0].toUpperCase() + o.slice(1))}</div>
+    <div class="field"><label>Publishing slot</label>${seg("slot", slots.map((s) => s.label), st.slot)}</div>
+    <div class="field"><label for="stIdea">Your idea</label><textarea id="stIdea" placeholder="e.g. flipping a sample from my dad's old record">${esc(st.idea)}</textarea></div>
+    <div class="row"><button class="btn btn-cta" data-act="stwrite" id="stWrite">${I("chat", 16)} Write it with Mepa</button><span class="note" id="stNote"></span></div>
+    <div class="field"><label for="stCap">Opening line & caption</label><textarea id="stCap" style="min-height:120px" placeholder="Mepa drafts the opening line, caption and shot list here. Edit anything.">${esc(st.caption)}</textarea></div>
+    <div class="field"><label for="stTags">Hashtags</label><input id="stTags" value="${esc(st.hashtags)}" placeholder="#producer #beatmaking"></div>
+    <div class="row"><button class="btn btn-dark" data-act="stsave">Add to plan</button><span class="note">Lands on your Growth plan at the chosen slot.</span></div>
+  </section>
+  <div class="stack"><section class="card" id="estCard">${estimateCard()}</section>
+  <section class="card side" style="grid-template-columns:minmax(0,1fr) 90px"><div><span class="eyebrow">Tip from Mepa</span><p style="margin-top:6px;color:var(--ink)">${studioTip(st)}</p></div><div class="mascot" style="width:90px;height:90px">${mascotSVG("sm")}</div></section></div></div>`;
+}
+function estimateCard() {
+  const st = studioState(), e = estimate(st), sc = (v) => Math.min(100, (v / e.max) * 100);
+  const line = (l, v) => `<div class="factor"><span>${l}</span><span class="num" style="font-weight:700;color:${v > 1.02 ? "var(--good)" : v < 0.98 ? "var(--bad)" : "var(--ink-2)"}">${v > 1.02 ? "▲" : v < 0.98 ? "▼" : "■"} ${v.toFixed(2)}×</span></div>`;
+  return `<span class="eyebrow muted">Expected range</span><h2 style="font-size:1.9rem;margin-top:4px" class="num">${k(e.low)}–${k(e.high)} <span style="font-size:1rem;color:var(--ink-3)">views</span></h2><p class="small muted">Most likely around ${k(e.mid)} on ${PL[st.platform]}, from your last 120 days.</p>
+  <div class="range" style="margin-block:14px"><div class="range-bar"><i style="left:${sc(e.low)}%;width:${Math.max(2, sc(e.high) - sc(e.low))}%"></i><b style="left:${sc(e.mid)}%"></b></div><div class="row between note"><span>0</span><span>${k(e.max)}</span></div></div>
+  <div>${line(FMT[st.format] + " format", e.f.format)}${line(HOOK[st.hook] + " opening", e.f.hook)}${line(st.topic[0].toUpperCase() + st.topic.slice(1), e.f.topic)}${line(st.slot || "Slot", e.f.time)}</div>
+  <p class="note" style="margin-top:10px">Multipliers compare similar posts with your average. A range, not a promise.</p>`;
+}
+function studioTip(st) { const e = estimate(st), worst = Object.entries(e.f).sort((a, b) => a[1] - b[1])[0]; return worst[1] < 0.95 ? `Your ${worst[0] === "time" ? "slot" : worst[0]} choice is holding this post back (${worst[1].toFixed(2)}×). Try swapping it and watch the range move.` : `Strong setup. ${HOOK[st.hook]} openings are working for you; keep the first line under 8 words.`; }
+after.studio = () => {
+  const st = studioState();
+  $("#stIdea").addEventListener("input", (e) => (st.idea = e.target.value));
+  $("#stCap").addEventListener("input", (e) => (st.caption = e.target.value));
+  $("#stTags").addEventListener("input", (e) => (st.hashtags = e.target.value));
+};
+async function studioWrite() {
+  const st = studioState(), btn = $("#stWrite"), note = $("#stNote"), cap = $("#stCap");
+  btn.disabled = true; note.textContent = "Mepa is writing…";
+  const sample = aiState === "off" ? null : await getSample();
+  try {
+    if (!sample) throw { offline: true };
+    const out = await sample.json(`You are Mepa, an AI manager for ${S.profile.name} (@${S.profile.handle}), ${S.profile.niche}. Voice: ${S.profile.voice}. Boundaries: ${S.profile.boundaries}.
+Write a ${PL[st.platform]} ${FMT[st.format].toLowerCase()} about "${st.topic}" with a ${HOOK[st.hook].toLowerCase()} opening, to post ${st.slot}. Creator's idea: ${st.idea || "(none, suggest one)"}.
+Reply with only JSON: {"opening":"first line, under 10 words","caption":"2-3 short lines","shotList":["3-5 short steps"],"hashtags":["4-6 tags without #"]}`, { cache: false, modelTier: "default" });
+    st.caption = `${out.opening || ""}\n\n${out.caption || ""}\n\nShot list:\n${(out.shotList || []).map((s) => "- " + s).join("\n")}`.trim();
+    st.hashtags = (out.hashtags || []).map((h) => "#" + String(h).replace(/^#/, "")).join(" ");
+    aiState = "on"; note.textContent = "";
+  } catch (e) {
+    if (e?.offline || permanentOff(e)) { aiState = "off"; const t = templateIdeas().find((x) => x.platform === st.platform) || templateIdeas()[0]; st.caption = `${t.hook}\n\n${t.caption}\n\nShot list:\n- ${t.description}`; st.hashtags = t.hashtags.map((h) => "#" + h).join(" "); note.textContent = "Offline draft (live AI unavailable here)."; }
+    else note.textContent = errCopy(e);
+  }
+  btn.disabled = false; cap.value = st.caption; $("#stTags").value = st.hashtags;
+}
+function studioSave() {
+  const st = studioState(), [wd, hm] = (st.slot || "Mon 20:00").split(" "), w = WD.indexOf(wd);
+  let d = null; for (let i = 0; i <= 7; i++) { const x = new Date(at0(i, 0)); if (x.getDay() === w) { const [h, m] = hm.split(":").map(Number); x.setHours(h, m); if (x.getTime() > NOW) { d = x; break; } } }
+  const first = (st.caption.split("\n")[0] || "").trim();
+  addIdeas([{ title: st.idea.trim() || first || `${HOOK[st.hook]} ${FMT[st.format].toLowerCase()} about ${st.topic}`, platform: st.platform, format: st.format, hook: first, description: st.caption.split("Shot list:")[1]?.trim() || "", caption: st.caption, hashtags: st.hashtags.split(/\s+/).filter(Boolean).map((h) => h.replace(/^#/, "")), why: `Expected ${k(estimate(st).low)}–${k(estimate(st).high)} views from your numbers.`, date: d ? isoDay(d) : null, time: hm }]);
+  S.studio = null; toast("Added to your plan", { label: "View plan", run: () => (location.hash = "growth") });
+  render();
+}
+
+/* =============================================================== Results */
+function computedReport() {
+  const ps = allPosts(), c = compare(ps, 7), wk = within(ps, 7).sort((a, b) => b.views - a.views), hooks = breakdown(within(ps, 90), "hook"), slots = bestTimes(within(ps, 120), ACTIVE), snaps = totalSnaps(), g = snaps.length ? snaps.at(-1).followers - snaps.at(-8).followers : 0, top = wk[0];
+  return { generated: NOW, ai: false, headline: top ? `"${top.caption.replace(/^[^:?]+[:?]\s*/, "")}" carried the week with ${k(top.views)} views.` : "A quiet week.",
+    summary: `You posted ${c.c.posts} times (${c.dPosts >= 0 ? "+" : ""}${c.dPosts} vs last week), reaching ${k(c.c.reach)} accounts at ${pct(c.c.avgEr, 2)} engagement, and gained ${g.toLocaleString("en")} followers.`,
+    wins: [top ? `Your top post hit ${k(top.views)} views with ${pct(er(top))} engagement.` : "You stayed consistent.", `${HOOK[hooks[0].key]} openings keep winning at ${hooks[0].lift.toFixed(1)}× your average views.`, `+${g.toLocaleString("en")} followers across platforms.`],
+    watchouts: [`${HOOK[hooks.at(-1).key]} openings lag at ${hooks.at(-1).lift.toFixed(2)}× your average.`, `${S.deals.filter((d) => d.stage === "new").length} brand offers are waiting for a reply.`],
+    priorities: [{ title: `Post 2 ${HOOK[hooks[0].key].toLowerCase()} shorts at ${slots[0].label}`, why: "Your best-performing combination." }, { title: "Reply to Nordtone Audio and decline SpinPlay", why: "One fits, one breaks your boundaries." }, { title: "Batch-film next week's plan on Sunday", why: `Keeps you within ${S.profile.hours} hours a week.` }] };
+}
+function vResults() {
+  const r = S.reports[0] || computedReport(), ps = within(allPosts(), 90), hk = breakdown(ps, "hook"), tp = breakdown(ps, "topic"), wd = breakdown(ps, "weekday");
+  const learn = [
+    { t: `${HOOK[hk[0].key]} openings work`, b: `${hk[0].lift.toFixed(1)}× your average views across ${hk[0].posts} posts.`, c: "k4" },
+    { t: `${tp[0].key[0].toUpperCase() + tp[0].key.slice(1)} is your topic`, b: `${tp[0].lift.toFixed(1)}× views. ${tp.at(-1).key[0].toUpperCase() + tp.at(-1).key.slice(1)} lags at ${tp.at(-1).lift.toFixed(2)}×.`, c: "k2" },
+    { t: `${wd[0].key} beats ${wd.at(-1).key}`, b: `${k(wd[0].avgViews)} vs ${k(wd.at(-1).avgViews)} average views per post.`, c: "k3" },
+  ];
+  return `${head("Learn from reality", "What actually happened, in plain words, and what to do about it.", `<div class="row"><span class="note" id="repNote"></span><button class="btn btn-dark" data-act="genreport" id="genRep">${I("doc", 16)} Write this week's report with Mepa</button></div>`)}
+  <div class="grid3">${learn.map((l) => `<div class="kpi ${l.c}"><span class="eyebrow">What we learned</span><h3 style="font-size:1.12rem;margin-top:6px">${esc(l.t)}</h3><p class="small" style="margin-top:4px;opacity:.85">${esc(l.b)}</p></div>`).join("")}</div>
+  <article class="card" style="margin-top:16px;display:grid;gap:16px;max-width:820px"><div class="row between"><span class="eyebrow muted">Week ending ${dl(r.generated, { day: "numeric", month: "long", year: "numeric" })}</span><span class="tag ${r.ai ? "good" : ""}">${r.ai ? "Written by Mepa" : "Auto-summary"}</span></div>
+  <h2 style="font-size:1.5rem;line-height:1.25">${esc(r.headline)}</h2><p style="color:var(--ink-2)">${esc(r.summary)}</p>
+  <div class="grid2"><div><h3>What went well</h3><ul class="plain" style="margin-top:6px">${r.wins.map((w) => `<li>${esc(w)}</li>`).join("")}</ul></div><div><h3>Keep an eye on</h3><ul class="plain" style="margin-top:6px">${r.watchouts.map((w) => `<li>${esc(w)}</li>`).join("")}</ul></div></div>
+  <div><h3>Your priorities this week</h3><div style="display:grid;gap:10px;margin-top:8px">${r.priorities.map((p, i) => `<div class="prio"><span class="n">${i + 1}</span><div><div style="font-weight:700">${esc(p.title)}</div><div class="muted small">${esc(p.why)}</div></div></div>`).join("")}</div></div></article>`;
+}
+async function genReport() {
+  const btn = $("#genRep"); btn.disabled = true; btn.textContent = "Writing your report…";
+  const sample = aiState === "off" ? null : await getSample();
+  try {
+    if (!sample) throw { offline: true };
+    const ps = allPosts(), c = compare(ps, 7), wk = within(ps, 7).sort((a, b) => b.views - a.views), snaps = totalSnaps();
+    const m = { thisWeek: { ...c.c, avgEr: +c.c.avgEr.toFixed(4) }, lastWeek: { ...c.p, avgEr: +c.p.avgEr.toFixed(4) }, followersGained: snaps.at(-1).followers - snaps.at(-8).followers, topPosts: wk.slice(0, 3).map((p) => ({ platform: p.platform, caption: p.caption, views: p.views, er: +er(p).toFixed(3), hook: p.hook, topic: p.topic })), hooks90d: breakdown(within(ps, 90), "hook").map((r) => ({ hook: r.key, lift: +r.lift.toFixed(2) })), openDeals: S.deals.filter((d) => d.stage === "new").map((d) => d.brand) };
+    const out = await sample.json(`You are Mepa, an AI talent manager. Write ${S.profile.name}'s weekly report from these numbers. Honest, specific, one sentence per item, cite numbers. Niche: ${S.profile.niche}. Goals: ${S.profile.goals}. Boundaries: ${S.profile.boundaries}.
+Metrics (engagement rates are fractions; lift is relative to their average): ${JSON.stringify(m)}
+Reply with only JSON: {"headline":"","summary":"2-3 sentences","wins":["",""],"watchouts":["",""],"priorities":[{"title":"","why":""},{"title":"","why":""},{"title":"","why":""}]}`, { cache: false });
+    if (!out?.headline || !Array.isArray(out.priorities)) throw { code: "invalid_json" };
+    S.reports.unshift({ generated: Date.now(), ai: true, headline: String(out.headline), summary: String(out.summary || ""), wins: (out.wins || []).map(String), watchouts: (out.watchouts || []).map(String), priorities: out.priorities.slice(0, 3).map((p) => ({ title: String(p.title || ""), why: String(p.why || "") })) });
+    pushNotif({ type: "report", icon: "doc", title: "Your weekly report is ready", body: S.reports[0].headline, go: "results" }, false);
+    persist(); aiState = "on"; render(); toast("Your report is ready");
+  } catch (e) { if (e?.offline || permanentOff(e)) aiState = "off"; render(); $("#repNote").textContent = e?.offline || permanentOff(e) ? "Live AI isn't available here; showing the auto-summary." : errCopy(e); }
+}
+
+/* ================================================================= Chat */
+function brief() {
+  const c = compare(allPosts(), 28);
+  return `You are Mepa, an AI talent manager and content strategist (a friendly purple studio sidekick) for one creator. You talk directly with them like a great manager texting a client: warm, direct, concise, specific.
+Rules:
+- Ground every claim in the creator's data; use the tools for details. Never invent a metric.
+- Be specific: name the format, opening, topic, day and time. Explain why in one line with their numbers.
+- Small samples are noisy: call thin patterns a hunch to test.
+- Respect their voice and boundaries; never push brands or content they've ruled out.
+- Brand deals: suggest rate ranges and draft replies; the creator decides and sends. Flag risky terms (exclusivity, usage rights, payment) and suggest a lawyer for anything binding. Remind them to label ads.
+- Save ideas to the plan only when asked to plan or save. Use remember for lasting facts.
+- Under ~200 words unless asked. Short paragraphs and bullets. Reply in the creator's language.
+- This is a product demo with sample data; coach as if it were real.
+
+Creator: ${S.profile.name} (@${S.profile.handle}), ${S.profile.niche}, ${S.profile.city}.
+Goals: ${S.profile.goals}
+Audience: ${S.profile.audience}
+Voice: ${S.profile.voice}
+Boundaries: ${S.profile.boundaries}
+Hours per week: ${S.profile.hours}
+You remember: ${S.memory.join("; ") || "nothing yet"}
+Today: ${dl(NOW, { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+Connected: ${platforms().map((p) => `${PL[p]} ${followers(p).toLocaleString("en")} followers`).join(", ")}
+Last 28 days: ${c.c.posts} posts, reach ${c.c.reach.toLocaleString("en")} (${pct(c.dReach)} vs prior 28 days), engagement rate ${pct(c.c.avgEr, 2)} (${pct(c.dEr)} relative change).`;
+}
+const pfx = (v) => (PL[v] && S.connected[v] ? v : "all");
+function chatTools(onStep) {
+  const step = (label, fn) => (input) => { onStep(label); return fn(input || {}); };
+  const P = { type: "string", enum: ["all", "instagram", "tiktok", "youtube"] };
+  return [
+    { name: "get_posts", description: "List posts ranked by a metric with caption, platform, format, date, views, engagement rate, saves, shares, comments, topic and opening (hook). order=bottom for underperformers.", inputSchema: { type: "object", properties: { platform: P, days: { type: "number" }, sort_by: { type: "string", enum: ["views", "engagement_rate", "saves", "shares", "comments"] }, order: { type: "string", enum: ["top", "bottom"] }, limit: { type: "number" } } },
+      execute: step("Looking at your posts", (i) => { const ps = within(allPosts(pfx(i.platform)), Number(i.days) || 28), kk = i.sort_by || "views", sc = (p) => (kk === "engagement_rate" ? er(p) : p[kk]), s = [...ps].sort((a, b) => sc(b) - sc(a)); return { postsInWindow: ps.length, posts: (i.order === "bottom" ? s.reverse() : s).slice(0, Math.min(10, Number(i.limit) || 5)).map((p) => ({ platform: p.platform, format: p.format, date: dl(p.at) + " " + tl(p.at), caption: p.caption, views: p.views, engagementRate: +er(p).toFixed(4), saves: p.saves, shares: p.shares, comments: p.comments, topic: p.topic, hook: p.hook })) }; }) },
+    { name: "get_breakdown", description: "Average views and engagement grouped by format, hook (opening), topic, weekday or hour. lift is relative to the creator's average (1.4 = 40% above).", inputSchema: { type: "object", properties: { dimension: { type: "string", enum: ["format", "hook", "topic", "weekday", "hour"] }, platform: P, days: { type: "number" } }, required: ["dimension"] },
+      execute: step("Finding patterns", (i) => { const dim = ["format", "hook", "topic", "weekday", "hour"].includes(i.dimension) ? i.dimension : "format", ps = within(allPosts(pfx(i.platform)), Number(i.days) || 90); return { postsAnalyzed: ps.length, rows: breakdown(ps, dim).map((r) => ({ ...r, avgEr: +r.avgEr.toFixed(4), lift: +r.lift.toFixed(2) })) }; }) },
+    { name: "compare_periods", description: "Compare the last N days with the N days before: posts, reach, average views, engagement rate.", inputSchema: { type: "object", properties: { days: { type: "number" }, platform: P } },
+      execute: step("Comparing periods", (i) => { const d = Number(i.days) || 28, c = compare(allPosts(pfx(i.platform)), d); return { days: d, current: { ...c.c, avgEr: +c.c.avgEr.toFixed(4) }, previous: { ...c.p, avgEr: +c.p.avgEr.toFixed(4) } }; }) },
+    { name: "get_audience_and_times", description: "Audience demographics and the best posting slots in local time.", execute: step("Checking your audience", () => ({ demographics: AUDIENCE, bestSlots: bestTimes(within(allPosts(), 120), ACTIVE).map((s) => s.label) })) },
+    { name: "estimate_rates", description: "Suggested EUR price range per sponsored post per platform from CPM benchmarks on 90-day average views, adjusted for engagement.", execute: step("Benchmarking your rates", () => platforms().map((p) => { const s = summarize(within(S.data[p].posts, 90)); return { ...rate(p, s.avgViews, s.avgEr), avgViews90d: s.avgViews }; })) },
+    { name: "get_deals", description: "Brand deals pipeline: brand, deliverables, offer EUR, stage, reply-by, usage rights, exclusivity, notes.", execute: step("Reading your brand deals", () => S.deals.map((d) => ({ brand: d.brand, what: d.what, offerEur: d.offer, stage: d.stage, replyBy: dl(d.due), usage: d.usage, exclusivity: d.exclusivity, note: d.note }))) },
+    { name: "get_plan", description: "The content plan: scheduled and backlog ideas.", execute: step("Reading your plan", () => S.plan.filter((x) => x.status !== "dismissed").map((x) => ({ title: x.title, platform: x.platform, when: x.day ? dl(x.day) + " " + tl(x.day) : null, status: x.status }))) },
+    { name: "add_to_plan", description: "Save post ideas to the content plan. Only when the creator asks to plan or save. date YYYY-MM-DD within 7 days, time HH:MM.", inputSchema: { type: "object", properties: { ideas: { type: "array", items: { type: "object", properties: { title: { type: "string" }, platform: { type: "string", enum: ["instagram", "tiktok", "youtube"] }, format: { type: "string", enum: ["reel", "carousel", "image", "video", "short"] }, hook: { type: "string" }, description: { type: "string" }, caption: { type: "string" }, hashtags: { type: "array", items: { type: "string" } }, why: { type: "string" }, date: { type: "string" }, time: { type: "string" } }, required: ["title", "platform", "format", "hook", "why"] } } }, required: ["ideas"] },
+      execute: step("Saving ideas to your plan", (i) => ({ saved: addIdeas(Array.isArray(i.ideas) ? i.ideas : []) })) },
+    { name: "remember", description: "Save a lasting fact about the creator for future conversations.", inputSchema: { type: "object", properties: { fact: { type: "string" } }, required: ["fact"] },
+      execute: step("Making a note", (i) => { const f = String(i.fact || "").slice(0, 300); if (f) { S.memory.push(f); persist(); } return { saved: !!f }; }) },
+  ];
+}
+let chatCtl = null, pendingAsk = null;
+function vChat() {
+  return `${head("Ask your numbers", "Mepa sees your accounts, plan and deals. Ask anything.", `<button class="btn btn-ghost btn-sm" data-act="newchat">New conversation</button>`)}
+  <div class="chat"><div class="msgs" id="msgs"></div><form class="composer" id="composer"><textarea id="chatInput" rows="1" placeholder="Ask about your content, growth, audience or a brand offer…" aria-label="Message"></textarea><button class="btn btn-dark" id="sendBtn" type="submit">Send</button></form>
+  <p class="note" style="margin-top:6px">Mepa is an AI. Double-check decisions about contracts and money.</p></div>`;
+}
+function renderMsgs() {
+  const el = $("#msgs"); if (!el) return;
+  if (!S.chat.length) { el.innerHTML = `<div style="margin:auto 0;display:grid;gap:14px;justify-items:start"><div class="row" style="gap:14px"><div class="mascot" style="width:84px;height:84px">${mascotSVG("cm")}</div><div><h2 style="font-size:1.4rem">Hey ${esc(S.profile.name.split(" ")[0])}, what are we working on?</h2><p class="muted small">I've read your last 120 days on ${platforms().map((p) => PL[p]).join(", ")}.</p></div></div><div class="starters">${["What's working best for me right now?", "Plan my posts for next week and save them", "Why is my engagement rate down while reach is up?", "Nordtone offered €1,800 for a TikTok and a reel. Fair?"].map((q) => `<button class="starter" data-act="ask" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div></div>`; return; }
+  el.innerHTML = S.chat.map((m) => m.role === "user" ? `<div class="msg-user">${esc(m.content)}</div>` : `<div class="msg-ai"><div class="mini">${mascotSVG("x" + Math.random().toString(36).slice(2, 6))}</div><div class="bubble">${m.steps?.length ? `<div class="steps">${m.steps.map((s) => `<span class="tag good">${esc(s)}</span>`).join("")}</div>` : ""}${m.content ? `<div class="md">${md(m.content)}</div>` : `<span class="thinking"><i class="dot"></i><i class="dot"></i><i class="dot"></i> ${esc(m.status || "Thinking")}…</span>`}${m.note ? `<p class="ai-off" style="margin-top:8px">${esc(m.note)}</p>` : ""}</div></div>`).join("");
+  el.scrollTop = el.scrollHeight;
+}
+after.chat = () => {
+  renderMsgs(); const input = $("#chatInput");
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("#composer").requestSubmit(); } });
+  input.addEventListener("input", () => { input.style.height = "auto"; input.style.height = Math.min(160, input.scrollHeight) + "px"; });
+  $("#composer").addEventListener("submit", (e) => { e.preventDefault(); if (chatCtl) { chatCtl.abort(); return; } const q = input.value.trim(); if (q) { input.value = ""; ask(q); } });
+  if (pendingAsk) { const q = pendingAsk; pendingAsk = null; ask(q); }
+};
+async function ask(q) {
+  if (chatCtl) return;
+  S.chat.push({ role: "user", content: q }); const msg = { role: "assistant", content: "", steps: [], status: "Thinking" }; S.chat.push(msg); renderMsgs();
+  const sb = $("#sendBtn"); if (sb) sb.textContent = "Stop"; chatCtl = new AbortController();
+  const sample = aiState === "off" ? null : await getSample();
+  try {
+    if (!sample) throw { offline: true };
+    const lim = await sample.limits().catch(() => null);
+    const turns = S.chat.slice(0, -1).filter((m) => m.content).slice(-12).map((m) => ({ role: m.role, content: m.content }));
+    const tools = lim?.tools ? chatTools((label) => { if (!msg.steps.includes(label)) msg.steps.push(label); msg.status = label; renderMsgs(); }).slice(0, lim.tools.maxCount) : undefined;
+    const res = await sample([{ role: "user", content: brief() + (tools ? "" : "\n\nTools are unavailable; use the snapshot above.") }, ...turns], { cache: false, signal: chatCtl.signal, tools, onText: ({ text }) => { msg.content = text; renderMsgs(); } });
+    msg.content = res.text; aiState = "on"; if (res.truncated) msg.note = "Cut short. Ask for less at a time.";
+  } catch (e) {
+    if (e?.code === "cancelled") msg.content = e.text || "Stopped.";
+    else if (e?.offline || permanentOff(e)) { aiState = "off"; msg.content = offlineAnswer(q); msg.note = OFF_NOTE; }
+    else { msg.content = e?.text || "I couldn't answer that just now."; msg.note = errCopy(e); }
+  } finally { chatCtl = null; delete msg.status; renderMsgs(); const b = $("#sendBtn"); if (b) b.textContent = "Send"; renderShell(); }
+}
+function offlineAnswer(q) {
+  const s = q.toLowerCase(), ps = within(allPosts(), 90), hk = breakdown(ps, "hook"), fm = breakdown(ps, "format"), tp = breakdown(ps, "topic"), slots = bestTimes(within(allPosts(), 120), ACTIVE);
+  if (/nordtone|offer|fair|deal|charge|rate|price|brand/.test(s)) { const d = S.deals.find((x) => x.id === "d1"), ig = summarize(within(S.data.instagram.posts, 90)), tt = summarize(within(S.data.tiktok.posts, 90)), ri = rate("instagram", ig.avgViews, ig.avgEr), rt = rate("tiktok", tt.avgViews, tt.avgEr), lo = ri.low + rt.low, hi = ri.high + rt.high;
+    return `**Short answer: it's a bit low.** A reel plus a TikTok from you is worth roughly **${eur(lo)}–${eur(hi)}** (your reels average ${k(ig.avgViews)} views, TikToks ${k(tt.avgViews)}).\n\nNordtone offers ${eur(d.offer)}. I'd counter at **${eur(Math.round((lo + hi) / 2 / 50) * 50)}**, organic use only for 30 days.\n\nThe brand fits your gear content and doesn't break your boundaries. Want me to draft the reply? (Label both posts as **Werbung / Ad**.)`; }
+  if (/plan|next week|schedule|ideas/.test(s)) { const n = addIdeas(templateIdeas()); return `Done. I added **${n} posts** to your Growth plan for the next 7 days, all on your best slots (${slots.slice(0, 3).map((x) => x.label).join(", ")}).\n\n- Leading with **${HOOK[hk[0].key].toLowerCase()}** openings (${hk[0].lift.toFixed(1)}× your average views)\n- **${FMT[fm[0].key]}s** stay your main format\n- Two **${tp[0].key}** posts, your strongest topic\n\nOpen *Growth plan* to tweak anything.`; }
+  if (/engagement|down|drop|why|flop/.test(s)) { const c = compare(allPosts(), 28); return `Good catch. Over the last 28 days **reach is ${c.dReach >= 0 ? "up" : "down"} ${pct(Math.abs(c.dReach))}** but **engagement rate is ${c.dEr < 0 ? "down" : "up"} ${pct(Math.abs(c.dEr))}**.\n\nThat usually means new people are seeing you who don't know you yet, so they watch but don't like or comment as much. That's normal when you grow.\n\nTo turn them into fans:\n- End with a **question** (your question openings get the most comments)\n- Pin a comment that asks them to follow for part 2\n- Post a follow-up to your top post within 48 hours`; }
+  return `Here's what's working for you (last 90 days):\n\n- **Format:** ${FMT[fm[0].key]}s average **${k(fm[0].avgViews)}** views, ${fm[0].lift.toFixed(1)}× your average\n- **Opening:** ${HOOK[hk[0].key].toLowerCase()} hooks do ${hk[0].lift.toFixed(1)}×\n- **Topic:** ${tp[0].key} leads at ${tp[0].lift.toFixed(1)}×\n- **Timing:** best slots are ${slots.slice(0, 3).map((x) => x.label).join(", ")}\n\nNext move: a ${HOOK[hk[0].key].toLowerCase()} ${FMT[fm[0].key].toLowerCase()} about ${tp[0].key}, posted ${slots[0].label}.`;
+}
+
+/* ================================================================ Deals */
+const STAGES = [["new", "New offers"], ["negotiating", "Negotiating"], ["confirmed", "Confirmed"], ["paid", "Paid"]];
+const BANNED = { gambling: ["casino", "gambling", "betting", "poker"], alcohol: ["alcohol", "beer", "vodka", "gin"], crypto: ["crypto", "token", "nft"], "fast fashion": ["fast fashion"] };
+function fit(d) {
+  const b = S.profile.boundaries.toLowerCase(), w = (d.brand + " " + d.what + " " + d.note).toLowerCase();
+  for (const [rule, words] of Object.entries(BANNED)) if (b.includes(rule) && words.some((x) => w.includes(x))) return { level: "bad", label: "Breaks your boundaries" };
+  const s = summarize(within(S.data[d.platform]?.posts || [], 90)), r = rate(d.platform, s.avgViews, s.avgEr);
+  return d.offer < r.low ? { level: "warn", label: "Below your rate" } : { level: "good", label: "Good fit" };
+}
+function vDeals() {
+  const sum = (st) => S.deals.filter((d) => d.stage === st).reduce((a, d) => a + d.offer, 0);
+  return `${head("Brand deals", "Every offer in one place. Mepa checks the fit, the price and the fine print.", `<button class="btn btn-ghost" data-act="adddeal">Add an offer</button>`)}
+  <div class="grid4">${[["New offers", S.deals.filter((d) => d.stage === "new").length, "k2"], ["In negotiation", eur(sum("negotiating")), "k3"], ["Confirmed", eur(sum("confirmed")), "k4"], ["Paid this month", eur(sum("paid")), "k1"]].map(([l, v, c]) => `<div class="kpi ${c}"><span class="l">${l}</span><span class="v num" style="font-size:1.6rem">${v}</span></div>`).join("")}</div>
+  <div class="board" style="margin-top:16px">${STAGES.map(([kk, l]) => `<div class="col"><div class="col-h"><span>${l}</span><span>${S.deals.filter((d) => d.stage === kk).length}</span></div>${S.deals.filter((d) => d.stage === kk).map((d) => { const f = fit(d); return `<button class="deal" data-act="deal" data-id="${d.id}"><span class="row between"><span class="b">${esc(d.brand)}</span><span class="num" style="font-weight:700">${eur(d.offer)}</span></span><span class="small muted">${esc(d.what)}</span><span class="row"><span class="tag ${f.level}">${f.label}</span>${kk === "new" ? `<span class="tag">Reply by ${dl(d.due, { day: "numeric", month: "short" })}</span>` : ""}</span></button>`; }).join("")}</div>`).join("")}</div>`;
+}
+let dealCtl = null;
+function dealDrawer(id) {
+  const d = S.deals.find((x) => x.id === id); if (!d) return;
+  const f = fit(d), s = summarize(within(S.data[d.platform].posts, 90)), r = rate(d.platform, s.avgViews, s.avgEr);
+  drawer(`<div class="row between"><span class="tag ${f.level}">${f.label}</span><button class="btn btn-ghost btn-sm" data-act="close">Close</button></div>
+  <h2 style="font-size:1.45rem">${esc(d.brand)}</h2><p>${esc(d.what)}</p>
+  <div class="table-scroll"><table><tbody><tr><td class="muted">Offer</td><td class="num" style="font-weight:700">${eur(d.offer)}</td></tr><tr><td class="muted">Your typical rate</td><td class="num">${eur(r.low)}–${eur(r.high)} per ${PL[d.platform]} post</td></tr><tr><td class="muted">Usage rights</td><td>${esc(d.usage)}</td></tr><tr><td class="muted">Exclusivity</td><td>${esc(d.exclusivity)}</td></tr><tr><td class="muted">Reply by</td><td>${dl(d.due, { weekday: "long", day: "numeric", month: "long" })}</td></tr><tr><td class="muted">Contact</td><td style="user-select:all">${esc(d.contact)}</td></tr><tr><td class="muted">Notes</td><td>${esc(d.note)}</td></tr></tbody></table></div>
+  <div class="field"><label for="stage">Stage</label><select id="stage">${STAGES.map(([kk, l]) => `<option value="${kk}" ${kk === d.stage ? "selected" : ""}>${l}</option>`).join("")}</select></div>
+  <div class="card" style="background:var(--side);border:0;display:grid;gap:10px"><div class="row between"><div class="row"><div class="mascot" style="width:40px;height:40px">${mascotSVG("dm")}</div><h3>Mepa's take</h3></div><button class="btn btn-cta btn-sm" data-act="evaldeal" data-id="${d.id}" id="evalBtn">Evaluate & draft reply</button></div><div class="md" id="dealOut"><p class="muted">Get a verdict, a counter-offer and a ready-to-send reply.</p></div><p class="ai-off" id="dealNote"></p></div>`);
+  $("#stage").addEventListener("change", (e) => { d.stage = e.target.value; persist(); render(); toast(`Moved ${d.brand} to ${STAGES.find(([kk]) => kk === d.stage)[1]}`); });
+}
+async function evalDeal(id) {
+  if (dealCtl) { dealCtl.abort(); return; }
+  const d = S.deals.find((x) => x.id === id), out = $("#dealOut"), btn = $("#evalBtn"), note = $("#dealNote"), f = fit(d), s = summarize(within(S.data[d.platform].posts, 90)), r = rate(d.platform, s.avgViews, s.avgEr);
+  out.innerHTML = `<span class="thinking"><i class="dot"></i><i class="dot"></i><i class="dot"></i> Reading the offer…</span>`; note.textContent = ""; btn.textContent = "Stop"; dealCtl = new AbortController();
+  const sample = aiState === "off" ? null : await getSample();
+  try {
+    if (!sample) throw { offline: true };
+    const res = await sample(`You are Mepa, an AI talent manager. Evaluate this brand offer for your creator and draft their reply. Use markdown sections: "Verdict" (accept, counter or decline, and why, one line), "Watch out for" (2-4 bullets on usage rights, exclusivity, timing, payment terms; suggest a lawyer for anything binding), "Counter-offer" (EUR amount with rationale; skip if declining), "Draft reply" (short, friendly email in the creator's voice, first person). Remind them to label the post as an ad if they accept. Never recommend deals that break the creator's boundaries.
+Creator: ${S.profile.name}, ${S.profile.niche}. Boundaries: ${S.profile.boundaries}. Voice: ${S.profile.voice}.
+${PL[d.platform]} stats, 90 days: ${s.avgViews} avg views, ${pct(s.avgEr)} engagement, ${followers(d.platform).toLocaleString("en")} followers. Benchmark: ${eur(r.low)}–${eur(r.high)} per post.
+Offer: ${d.brand}: ${d.what}. ${eur(d.offer)}. Usage: ${d.usage}. Exclusivity: ${d.exclusivity}. Reply by ${dl(d.due)}. Notes: ${d.note}`, { signal: dealCtl.signal, cache: false, onText: ({ text }) => { out.innerHTML = md(text); } });
+    out.innerHTML = md(res.text); aiState = "on";
+  } catch (e) {
+    if (e?.code === "cancelled") { if (e.text) out.innerHTML = md(e.text); }
+    else if (e?.offline || permanentOff(e)) { aiState = "off"; out.innerHTML = md(offlineDeal(d, f, r)); note.textContent = OFF_NOTE; }
+    else { if (e?.text) out.innerHTML = md(e.text); note.textContent = errCopy(e); }
+  } finally { dealCtl = null; const b = $("#evalBtn"); if (b) b.textContent = "Evaluate & draft reply"; }
+}
+function offlineDeal(d, f, r) {
+  if (f.level === "bad") return `#### Verdict\nDecline. ${d.brand} breaks your boundary (${S.profile.boundaries.toLowerCase()}). The money isn't worth your audience's trust.\n\n#### Draft reply\nHi ${d.brand} team,\n\nThanks for reaching out! I only partner with brands that fit my community, so I'll pass on this one.\n\nBest,\n${S.profile.name}`;
+  const multi = /\+|and|2 /.test(d.what) ? 1.7 : 1, counter = Math.max(d.offer, Math.round(((r.low + r.high) / 2) * multi / 50) * 50);
+  return `#### Verdict\n${d.offer >= r.low * multi ? "Accept, after checking the terms." : `Counter. ${eur(d.offer)} is under your benchmark for this package.`}\n\n#### Watch out for\n- Usage: **${d.usage}**. ${/paid|ads|whitelist/i.test(d.usage) ? "Paid usage is worth +30-50% on top of the post fee." : "Organic only is standard."}\n- Exclusivity: **${d.exclusivity}**. ${/none/i.test(d.exclusivity) ? "No restrictions, good." : "Check it doesn't block other deals you're discussing."}\n- Ask for 50% upfront and payment within 30 days. Have anything binding checked by a lawyer.\n- Label the posts as **Werbung / Ad**.\n\n#### Counter-offer\n**${eur(counter)}**, based on your ${k(summarize(within(S.data[d.platform].posts, 90)).avgViews)} average views.\n\n#### Draft reply\nHi ${d.brand} team,\n\nThanks so much, I'd love to work together. For ${d.what.toLowerCase()}, my rate is ${eur(counter)}, including ${d.usage.toLowerCase()} usage. Happy to send a few concepts this week.\n\nBest,\n${S.profile.name}`;
+}
+function addDealModal() {
+  modal(`<h2>Add a brand offer</h2><p class="muted small">In the full product, Mepa reads offers straight from your inbox.</p>
+  <form id="dealForm" style="display:grid;gap:12px"><div class="field"><label for="nb">Brand</label><input id="nb" required placeholder="e.g. Nordtone Audio"></div><div class="field"><label for="nw">What they want</label><input id="nw" required placeholder="e.g. 1 reel + 2 stories"></div>
+  <div class="row"><div class="field" style="flex:1;min-width:120px"><label for="no">Offer (€)</label><input id="no" type="number" min="0" required value="1500"></div><div class="field" style="flex:1;min-width:120px"><label for="np">Platform</label><select id="np">${platforms().map((p) => `<option value="${p}">${PL[p]}</option>`).join("")}</select></div></div>
+  <div class="field"><label for="nu">Usage rights</label><input id="nu" value="Organic only, 30 days"></div><div class="row" style="justify-content:flex-end"><button type="button" class="btn btn-ghost" data-act="close">Cancel</button><button class="btn btn-dark">Add offer</button></div></form>`);
+  $("#dealForm").addEventListener("submit", (e) => { e.preventDefault(); const d = { id: "d" + Date.now(), brand: $("#nb").value.trim(), what: $("#nw").value.trim(), offer: Math.max(0, Number($("#no").value) || 0), platform: $("#np").value, stage: "new", due: NOW + 7 * DAY, usage: $("#nu").value.trim() || "Not stated", exclusivity: "Not stated", contact: "–", note: "Added manually." }; S.deals.push(d); persist(); closeLayer(); render(); dealDrawer(d.id); });
+}
+
+/* ============================================================ Media kit */
+function vKit() {
+  const ps = within(allPosts(), 90), s = summarize(ps), total = platforms().reduce((a, p) => a + followers(p), 0), best = [...ps].sort((a, b) => b.views - a.views).slice(0, 3);
+  const top = (o, n) => Object.entries(o).sort((a, b) => b[1] - a[1]).slice(0, n).map(([kk, v]) => `${kk} ${pct(v, 0)}`).join(" · ");
+  return `${head("Media kit", "A live page for brands that updates itself from your accounts.")}
+  <div class="cols"><section class="card side" style="display:block;background:var(--surface);border:1px solid var(--line)"><div style="display:grid;gap:12px">
+    <div class="field"><label for="kbio">Bio for brands</label><textarea id="kbio">${esc(S.kit.bio)}</textarea></div>
+    <div class="field"><label for="kmail">Business email</label><input id="kmail" type="email" value="${esc(S.kit.email)}"></div>
+    <label class="row small"><input type="checkbox" id="krates" ${S.kit.rates ? "checked" : ""}> Show indicative rates</label>
+    <div class="field"><label for="klink">Share link</label><div class="row"><input id="klink" readonly value="mepa.ai/kit/${esc(S.profile.handle)}" style="flex:1;min-width:0"><button class="btn btn-ghost btn-sm" data-act="copylink">Copy</button></div><span class="note">Prototype link for illustration.</span></div></div></section>
+  <article class="card" style="padding:0;overflow:hidden"><div style="background:var(--t1);color:var(--t1-ink);padding:24px;display:grid;gap:6px"><span class="eyebrow">Creator media kit</span><h2 style="font-size:2rem">@${esc(S.profile.handle)}</h2><p style="opacity:.85">${esc(S.profile.niche)} · ${esc(S.profile.city)}</p><p style="max-width:60ch;margin-top:4px">${esc(S.kit.bio)}</p></div>
+  <div style="padding:22px;display:grid;gap:18px"><div class="grid4">${[["Total audience", k(total), "k4"], ["Avg. views / post", k(s.avgViews), "k2"], ["Engagement", pct(s.avgEr, 2), "k3"], ["Posts, 90 days", s.posts, "k4"]].map(([l, v, c]) => `<div class="kpi ${c}"><span class="l">${l}</span><span class="v num" style="font-size:1.45rem">${v}</span></div>`).join("")}</div>
+  <div class="table-scroll"><table><thead><tr><th>Platform</th><th class="r">Followers</th><th class="r">Avg. views</th><th class="r">Engagement</th>${S.kit.rates ? `<th class="r">Rate per post</th>` : ""}</tr></thead><tbody>${platforms().map((p) => { const x = summarize(within(S.data[p].posts, 90)), r = rate(p, x.avgViews, x.avgEr); return `<tr><td><span class="row"><i class="sw ${p}"></i>${PL[p]}</span></td><td class="r num">${k(followers(p))}</td><td class="r num">${k(x.avgViews)}</td><td class="r num">${pct(x.avgEr)}</td>${S.kit.rates ? `<td class="r num">${eur(r.low)}–${eur(r.high)}</td>` : ""}</tr>`; }).join("")}</tbody></table></div>
+  <div class="grid2"><div><h3>Audience</h3><p class="small" style="margin-top:6px"><span class="muted">Age</span> ${top(AUDIENCE.age, 3)}</p><p class="small"><span class="muted">Gender</span> ${top(AUDIENCE.gender, 2)}</p><p class="small"><span class="muted">Countries</span> ${top(AUDIENCE.country, 3)}</p></div><div><h3>Partners</h3><p class="small" style="margin-top:6px">${S.deals.filter((d) => ["paid", "confirmed"].includes(d.stage)).map((d) => esc(d.brand)).join(" · ") || "–"}</p></div></div>
+  <div><h3>Top content, 90 days</h3>${best.map((p) => `<div class="row between" style="border-bottom:1px solid var(--line);padding:7px 0;flex-wrap:nowrap"><span class="cap1">${esc(p.caption)}</span><span class="num small muted" style="white-space:nowrap">${k(p.views)} views</span></div>`).join("")}</div>
+  <div><h3>Work with me</h3><p style="user-select:all;margin-top:4px">${esc(S.kit.email)}</p></div></div></article></div>`;
+}
+after.kit = () => { const save = () => { S.kit.bio = $("#kbio").value; S.kit.email = $("#kmail").value; S.kit.rates = $("#krates").checked; persist(); render(); }; ["#kbio", "#kmail", "#krates"].forEach((s) => $(s).addEventListener("change", save)); };
+
+/* ============================================================= Accounts */
+const SCOPES = { instagram: ["Read your profile and follower count", "Read your posts and their insights", "Read audience demographics"], tiktok: ["Read your profile and follower count", "Read your public videos and their stats"], youtube: ["Read your channel and videos", "Read YouTube Analytics (watch time, shares, audience)"] };
+function vAccounts() {
+  return `${head("Connected accounts", "Read-only access. Disconnect any time and your synced data is deleted.")}
+  <div style="display:grid;gap:12px;max-width:780px">${Object.keys(ACCOUNTS).map((p) => `<section class="card acct"><span class="plogo ${p}">${PL[p][0]}</span><div style="min-width:0"><h2>${PL[p]}</h2>${S.connected[p] ? `<p class="small muted">@${ACCOUNTS[p].handle} · ${followers(p).toLocaleString("en")} followers · ${S.data[p].posts.length} posts synced · today 06:00</p>${p === "youtube" ? `<p class="small" style="color:var(--bad);margin-top:2px">Access expires in 5 days. <button class="link" data-act="connect" data-p="youtube" style="background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font-weight:700">Reconnect</button></p>` : ""}` : `<p class="small muted">${SCOPES[p].join(" · ")}</p>`}</div><div id="acct-${p}">${S.connected[p] ? `<button class="btn btn-ghost btn-sm" data-act="disc" data-p="${p}">Disconnect</button>` : `<button class="btn btn-dark btn-sm" data-act="connect" data-p="${p}">Connect</button>`}</div></section>`).join("")}
+  <p class="note">Demo: connecting simulates the platform sign-in and imports sample data. In the product this is the real Instagram, TikTok or Google sign-in.</p></div>`;
+}
+function connectModal(p) {
+  modal(`<div class="row"><span class="plogo ${p}" style="width:36px;height:36px;border-radius:10px">${PL[p][0]}</span><h2>Connect ${PL[p]}</h2></div><p>Mepa is asking to access <strong>@${ACCOUNTS[p].handle}</strong>.</p>
+  <div class="perm">${SCOPES[p].map((s) => `<div><span style="color:var(--good);font-weight:800">✓</span><span>${s}</span></div>`).join("")}<div><span style="color:var(--bad);font-weight:800">✕</span><span>Mepa can't post, comment or send messages</span></div></div>
+  <div id="cstate" class="row" style="justify-content:flex-end"><button class="btn btn-ghost" data-act="close">Cancel</button><button class="btn btn-dark" data-act="allow" data-p="${p}">Allow access</button></div>`);
+}
+function runConnect(p) {
+  const steps = [`Importing ${S.data[p].posts.length} posts…`, "Reading insights and follower history…", "Tagging your content by topic and opening…", "Done"];
+  $("#cstate").outerHTML = `<div style="display:grid;gap:8px;width:100%"><div class="progress"><i id="cbar"></i></div><span class="small muted" id="cstep">${steps[0]}</span></div>`;
+  let i = 0; const tick = () => { i++; $("#cbar").style.width = (i / (steps.length - 1)) * 100 + "%"; $("#cstep").textContent = steps[Math.min(i, steps.length - 1)]; if (i < steps.length - 1) setTimeout(tick, 650); else setTimeout(() => { S.connected[p] = true; S.notifs = S.notifs.filter((n) => !(n.type === "account" && p === "youtube")); persist(); closeLayer(); render(); toast(`${PL[p]} connected`); }, 450); };
+  setTimeout(tick, 350);
+}
+
+/* ============================================================== Profile */
+const PFIELDS = [["name", "Creator name"], ["handle", "Main handle"], ["niche", "Your niche"], ["city", "City"], ["goals", "Goals for the next 6 months", 1], ["audience", "Who you make content for", 1], ["voice", "Your voice and style", 1], ["boundaries", "Boundaries (topics or brands you won't do)", 1], ["hours", "Hours per week for content"]];
+const NTYPES = [["perf", "Performance alerts", "Posts taking off, dips in reach or engagement"], ["deal", "Brand offers", "New offers, reply deadlines, flagged brands"], ["remind", "Posting reminders", "Before each scheduled post, at your best slot"], ["report", "Weekly report", "Every Monday morning"], ["account", "Account health", "Expiring access and sync problems"]];
+function vProfile() {
+  return `${head("Profile & notifications", "What Mepa knows about you, and how it reaches you.")}
+  <div class="grid2"><form class="card" id="pform" style="display:grid;gap:12px">${PFIELDS.map(([kk, l, long]) => `<div class="field"><label for="f-${kk}">${l}</label>${long ? `<textarea id="f-${kk}">${esc(S.profile[kk])}</textarea>` : `<input id="f-${kk}" ${kk === "hours" ? 'type="number" min="0" max="80"' : ""} value="${esc(S.profile[kk])}">`}</div>`).join("")}<div class="row"><button class="btn btn-dark">Save profile</button></div></form>
+  <div class="stack"><section class="card"><h2>Notifications</h2><p class="small muted" style="margin-top:4px">Choose what Mepa tells you about.</p><div style="margin-top:8px">${NTYPES.map(([kk, l, d]) => `<label class="switch"><span><b>${l}</b><br><span class="small muted">${d}</span></span><input type="checkbox" data-pref="${kk}" ${S.prefs[kk] ? "checked" : ""}></label>`).join("")}</div>
+    <h3 style="margin-top:14px">Where</h3><div style="margin-top:4px">${[["inapp", "In the app (bell)"], ["email", "Email"], ["push", "Phone push (mobile app)"]].map(([kk, l]) => `<label class="switch"><span>${l}</span><input type="checkbox" data-pref="${kk}" ${S.prefs[kk] ? "checked" : ""}></label>`).join("")}</div>
+    <div class="row" style="margin-top:12px"><button class="btn btn-ghost btn-sm" data-act="testnotif">Send a test notification</button></div></section>
+  <section class="card"><h2>What Mepa remembers</h2>${S.memory.length ? `<ul class="plain" style="margin-top:10px">${S.memory.map((m) => `<li>${esc(m)}</li>`).join("")}</ul>` : `<p class="muted small" style="margin-top:6px">Nothing yet. Tell Mepa about a launch or a goal in chat.</p>`}</section>
+  <section class="card"><h2>Demo data</h2><p class="small muted" style="margin-top:4px">Start over with the original sample creator.</p><button class="btn btn-ghost btn-sm" data-act="reset" style="margin-top:10px">Reset demo</button></section></div></div>`;
+}
+after.profile = () => {
+  $("#pform").addEventListener("submit", (e) => { e.preventDefault(); for (const [kk] of PFIELDS) { const v = $("#f-" + kk).value; S.profile[kk] = kk === "hours" ? Math.max(0, Math.min(80, Number(v) || 0)) : v.trim().replace(/^@/, "") || S.profile[kk]; } persist(); render(); toast("Profile saved"); });
+  document.querySelectorAll("[data-pref]").forEach((el) => el.addEventListener("change", () => { S.prefs[el.dataset.pref] = el.checked; persist(); renderShell(); }));
+};
+
+/* ======================================================== Notifications */
+function pushNotif(n, announce = true) {
+  const item = { id: "n" + Date.now(), at: Date.now(), read: false, ...n }; S.notifs.unshift(item); persist(); renderShell();
+  if (announce && S.prefs.inapp && S.prefs[n.type] !== false) toast(n.title, { label: "View", run: () => openNotif(item.id) });
+}
+function notifPanel() {
+  const list = S.notifs.filter((n) => S.prefs[n.type] !== false);
+  $("#popover").innerHTML = `<div class="pop" role="dialog" aria-label="Notifications"><div class="pop-h"><h3>Notifications</h3><div class="row"><button class="btn btn-ghost btn-sm" data-act="readall">Mark all read</button><a class="btn btn-ghost btn-sm" href="#profile">Settings</a></div></div>
+  <div class="pop-list">${list.map((n) => `<button class="notif" data-act="notif" data-id="${n.id}"><span class="ic ${n.type}">${I(n.icon || "bell", 16)}</span><span><div class="ttl">${esc(n.title)}</div><div class="bd">${esc(n.body)}</div><div class="tm">${ago(n.at)}</div></span>${n.read ? "<span></span>" : '<span class="ud" aria-label="unread"></span>'}</button>`).join("") || `<p class="muted small" style="padding:16px">You're all caught up.</p>`}</div></div>`;
+}
+function openNotif(id) {
+  const n = S.notifs.find((x) => x.id === id); if (!n) return; n.read = true; persist(); closePop();
+  const [kind, arg] = n.go.split(/:(.*)/s);
+  if (kind === "deal") { location.hash = "deals"; setTimeout(() => dealDrawer(arg), 80); }
+  else if (kind === "chat") { pendingAsk = arg; if (current === "chat") { after.chat(); } else location.hash = "chat"; }
+  else { if (current === kind) render(); else location.hash = kind; }
+  renderShell();
+}
+function workspaceMenu() {
+  const dark = document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+  $("#popover").innerHTML = `<div class="pop menu" style="width:260px"><div class="pop-h"><div><div style="font-weight:800">${esc(S.profile.name)}</div><div class="small muted">@${esc(S.profile.handle)}</div></div></div>
+  <a href="#deals">${I("deal", 16)} Brand deals ${S.deals.filter((d) => d.stage === "new").length ? `<span class="tag warn" style="margin-left:auto">${S.deals.filter((d) => d.stage === "new").length} new</span>` : ""}</a><a href="#kit">${I("kit", 16)} Media kit</a><a href="#accounts">${I("link", 16)} Connected accounts</a><a href="#profile">${I("user", 16)} Profile & notifications</a>
+  <button data-act="theme">${I("moon", 16)} Switch to ${dark ? "light" : "dark"} mode</button><button data-act="reset">${I("reset", 16)} Reset demo</button></div>`;
+}
+const closePop = () => ($("#popover").innerHTML = "");
+function scheduleLive() {
+  if (S.livePushed) return;
+  setTimeout(() => {
+    if (S.livePushed) return; S.livePushed = true;
+    S.deals.push({ id: "d6", brand: "Wavecraft Audio", what: "TikTok sample-pack challenge video", offer: 2200, platform: "tiktok", stage: "new", due: NOW + 6 * DAY, usage: "Organic + Spark Ads, 30 days", exclusivity: "Sample libraries, 14 days", contact: "collabs@wavecraft.example", note: "Arrived just now via email." });
+    pushNotif({ type: "deal", icon: "deal", title: "New offer from Wavecraft Audio", body: "€2,200 for a TikTok sample-pack challenge. Mepa thinks it's a good fit.", go: "deal:d6" });
+    if (current === "deals") render();
+  }, 14000);
+}
+
+/* ================================================================ layers */
+function modal(html) { $("#layer").innerHTML = `<div class="scrim" data-act="scrim"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`; $("#layer").querySelector("input, .btn-dark")?.focus(); }
+function drawer(html) { $("#layer").innerHTML = `<div class="scrim drawer-scrim" data-act="scrim"><div class="drawer" role="dialog" aria-modal="true">${html}</div></div>`; }
+function closeLayer() { dealCtl?.abort(); $("#layer").innerHTML = ""; }
+async function copy(text) { try { await navigator.clipboard.writeText(text); toast("Copied"); } catch { toast("Select the text to copy it"); } }
+
+/* ================================================================ events */
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-act]");
+  if (!e.target.closest("#popover") && !e.target.closest("#bell") && !e.target.closest("#meBtn")) closePop();
+  if (!t) return;
+  const a = t.dataset.act;
+  if (a === "scrim") { if (e.target === t) closeLayer(); return; }
+  if (a === "close") return closeLayer();
+  if (a === "bell") { if ($("#popover .pop:not(.menu)")) return closePop(); return notifPanel(); }
+  if (a === "menu") { if ($("#popover .menu")) return closePop(); return workspaceMenu(); }
+  if (a === "notif") return openNotif(t.dataset.id);
+  if (a === "readall") { S.notifs.forEach((n) => (n.read = true)); persist(); renderShell(); return notifPanel(); }
+  if (a === "testnotif") return pushNotif({ type: "remind", icon: "clock", title: "Test: post in 30 minutes", body: "This is how posting reminders look.", go: "growth" });
+  if (a === "theme") { const root = document.documentElement, dark = root.dataset.theme === "dark" || (!root.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches); root.dataset.theme = dark ? "light" : "dark"; closePop(); return render(); }
+  if (a === "mascot") { location.hash = "chat"; return; }
+  if (a === "focus") { S.focus = S.focus === t.dataset.p ? null : t.dataset.p; return renderDonut(); }
+  if (a === "perfpf") { S.perfPf = t.dataset.v; return render(); }
+  if (a === "perfdays") { S.perfDays = +t.dataset.v; return render(); }
+  if (a === "ask") { if (current !== "chat") { pendingAsk = t.dataset.q; location.hash = "chat"; } else ask(t.dataset.q); return; }
+  if (a === "newchat") { chatCtl?.abort(); S.chat = []; return renderMsgs(); }
+  if (a === "reset") { try { localStorage.removeItem(KEY); } catch {} location.hash = "overview"; location.reload(); return; }
+  if (a === "genplan") return genPlan();
+  if (a === "idea") return ideaDrawer(t.dataset.id);
+  if (a === "ideastatus") { const x = S.plan.find((i) => i.id === t.dataset.id); if (x) { x.status = t.dataset.v; persist(); closeLayer(); render(); toast(x.status === "posted" ? "Marked as posted" : x.status === "dismissed" ? "Removed from plan" : "Updated"); } return; }
+  if (a === "copycap") { const x = S.plan.find((i) => i.id === t.dataset.id); return copy(`${x.caption}\n\n${x.hashtags.map((h) => "#" + h.replace(/^#/, "")).join(" ")}`); }
+  if (a === "st") { const st = studioState(); st[t.dataset.k] = t.dataset.v; if (t.dataset.k === "platform") { st.format = ""; st.slot = ""; } return render(); }
+  if (a === "stwrite") return studioWrite();
+  if (a === "stsave") return studioSave();
+  if (a === "deal") { if (current !== "deals") { location.hash = "deals"; return setTimeout(() => dealDrawer(t.dataset.id), 80); } return dealDrawer(t.dataset.id); }
+  if (a === "evaldeal") return evalDeal(t.dataset.id);
+  if (a === "adddeal") return addDealModal();
+  if (a === "genreport") return genReport();
+  if (a === "copylink") return copy("https://" + $("#klink").value);
+  if (a === "connect") return connectModal(t.dataset.p);
+  if (a === "allow") return runConnect(t.dataset.p);
+  if (a === "disc") { const p = t.dataset.p; $("#acct-" + p).innerHTML = `<div class="row"><span class="small">Disconnect and delete synced data?</span><button class="btn btn-ghost btn-sm" data-act="disc-yes" data-p="${p}">Disconnect</button><button class="btn btn-ghost btn-sm" data-act="disc-no">Keep</button></div>`; return; }
+  if (a === "disc-yes") { const p = t.dataset.p; if (platforms().length === 1) { toast("Keep at least one account connected in the demo"); return render(); } S.connected[p] = false; if (S.focus === p) S.focus = null; if (S.perfPf === p) S.perfPf = "all"; if (S.studio?.platform === p) S.studio = null; persist(); render(); return toast(`${PL[p]} disconnected`); }
+  if (a === "disc-no") return render();
+});
+document.addEventListener("mouseover", (e) => { const c = e.target.closest(".cell"), tip = $("#heatTip"); if (c && tip) tip.textContent = c.dataset.tip; });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closePop(); if ($("#layer").innerHTML) closeLayer(); } });
+window.addEventListener("hashchange", route);
+route();
+scheduleLive();
+</script>
