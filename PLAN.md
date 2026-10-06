@@ -38,7 +38,7 @@
 
 | Platform | What we can get | Limits |
 |---|---|---|
-| **Instagram** (Graph API) | Profile, media, insights, comments, publishing, and demographics at 100+ followers | The account must be **Business/Creator** and **linked to a Facebook Page**. Needs Meta **App Review**. Personal accounts are not supported. |
+| **Instagram** (Instagram API with Instagram Login) | Profile, media, insights, comments, publishing, and demographics at 100+ followers | The account must be **Business/Creator**. The Instagram Login variant needs **no Facebook Page** (the older Facebook Login variant does). Needs Meta **App Review**. Personal accounts are not supported. |
 | **TikTok** (Login Kit + Display API + Content Posting API) | Profile, public videos and their stats, publishing or drafts | The Display API gives **no private analytics** (no watch time or audience data). Publishing needs an **audit**. About 6 posts per minute per user and a daily cap. |
 | **YouTube** (Data API v3 + Analytics API) | Full channel analytics with owner OAuth: retention, traffic sources, demographics, revenue | **10,000 quota units a day** by default. More requires an audit that can take weeks to months, and quota cannot be bought. |
 | **LinkedIn / X / Twitch / Pinterest / Snapchat** | Varies | Phase 2+ |
@@ -160,14 +160,14 @@
 - [ ] Interview 15–20 creators (10K–500K followers): what they would pay for and what a manager would do for them
 - [ ] Repo setup, CI, environments, privacy policy and terms (needed for the app reviews)
 
-### Phase 1: MVP, "AI content manager" (weeks 3–10)
-- [ ] Auth, onboarding interview, account connection (IG + YouTube first; TikTok as soon as it is approved)
-- [ ] Data sync jobs plus a normalized metrics schema
-- [ ] Dashboard: growth, top posts, engagement and best times
-- [ ] **Chat with the AI manager** (tool use over the creator's data)
-- [ ] Weekly AI report (email + in-app)
-- [ ] Content ideas and calendar
-- [ ] Auto media kit (shareable link)
+### Phase 1: MVP, "AI content manager" (weeks 3–10): built, see README.md
+- [x] Auth, onboarding interview, account connection (Instagram, YouTube and TikTok connectors, plus a demo account)
+- [x] Data sync jobs plus a normalized metrics schema
+- [x] Dashboard: growth, top posts, engagement and best times
+- [x] **Chat with the AI manager** (tool use over the creator's data)
+- [x] Weekly AI report (in-app; email delivery still open)
+- [x] Content ideas and calendar
+- [x] Auto media kit (shareable link)
 - [ ] Stripe subscriptions
 - **Goal:** 50 beta creators, with at least 40% using it weekly after 4 weeks
 
